@@ -11,7 +11,7 @@ breakeven_fee = ln(1 + gross_return) / (2 × trades)
 ```
 
 Take-profit and timeframe matter only through their effect on those two
-numbers. This held to three decimal places on all 20 measurements below, across
+numbers. This held on every measurement below where a gross edge exists, across
 three timeframes, which is unsurprising once written down — and is exactly why
 it is worth writing down.
 
@@ -38,8 +38,9 @@ backtester already reports.
   explicitly anyway, both because a study should not depend on a default and
   because on 0.2.8 and earlier the default was the opposite — see "two defects
   this study walked into" below.
-- **Engine:** rlx 0.2.9. `run.sh` prints the version it ran with; earlier
-  versions will not reproduce the table.
+- **Engine:** rlx 0.2.10. `run.sh` prints the version it ran with; earlier
+  versions will not reproduce the table — 0.2.9 and before left about half of
+  these trades without the bracket the strategy declares.
 - **Fees:** commission only, charged on notional at entry and exit separately.
   Slippage is **not** modelled, so every figure is optimistic.
 - **Breakeven** is found by bisecting the commission over 20 iterations, *not*
@@ -52,31 +53,32 @@ at that setting: cost is not what kills it.
 
 | TP | 1h | 4h | 1D |
 |---:|---:|---:|---:|
-| 0.50% | 0.00 | 0.00 | 0.56 |
-| 0.75% | 0.00 | 0.00 | 0.90 |
+| 0.50% | 0.00 | 0.00 | 0.00 |
+| 0.75% | 0.00 | 0.00 | 0.00 |
 | 1.00% | 0.00 | 0.00 | 0.00 |
-| 1.50% | 0.50 | 0.00 | 0.00 |
-| 2.00% | 0.62 | 0.77 | 0.00 |
-| 3.00% | 1.66 | 2.68 | 0.46 |
-| 4.00% | 3.14 | 3.04 | 0.10 |
-| 6.00% | 6.42 | 11.86 | 9.95 |
-| 8.00% | 11.85 | 15.13 | 26.10 |
-| 10.00% | 16.16 | 30.49 | 44.92 |
+| 1.50% | 0.00 | 0.00 | 0.00 |
+| 2.00% | 0.21 | 0.00 | 0.00 |
+| 3.00% | 1.50 | 0.25 | 0.00 |
+| 4.00% | 2.72 | 3.84 | 0.44 |
+| 6.00% | 6.66 | 9.88 | 7.20 |
+| 8.00% | 12.44 | 14.90 | 38.20 |
+| 10.00% | 16.82 | 26.88 | 31.30 |
 
 Against a real cost of 4.404 bps/side, this rule needs a take-profit of roughly
 **5% on 1h** before cost stops being the thing that kills it. At 3% — a setting
-that sounds conservative — it breaks even at 1.58 bps and loses money in
+that sounds conservative — it breaks even at 1.50 bps and loses money in
 practice by a factor of three.
 
 ## What the table does not say
 
 **It does not say higher timeframes help.** Read across any row: at a 3%
-take-profit the daily version tolerates *less* cost than the hourly one (0.46 vs
-1.58), and at 4% it is worse still (0.10 vs 3.14). The ordering flips again at
-6%. Timeframe is not a dial that improves cost tolerance.
+take-profit the daily version has no cost tolerance at all (0.00) while the
+hourly one survives 1.50 bps, and at 4% the daily still trails (0.44 vs 2.72).
+At 8% the ordering reverses and the daily version tolerates three times what the
+hourly does. Timeframe is not a dial that improves cost tolerance.
 
-**It does not say breakeven rises smoothly with take-profit.** The 1D column is
-non-monotone: 0.56 → 0.90 → 0.00 → … → 0.10 → 9.95. A law that produces that
+**It does not say breakeven rises smoothly with take-profit.** The 1D column ends
+38.20 → 31.30: widening the target made it *worse*. A law that produces that
 shape is not a law.
 
 Both readings dissolve once you look at what the fee is actually charged on.
@@ -91,23 +93,25 @@ the gross log edge equals that:
 Σ ln(1 + rᵢ) = 2nf     ⟹     f = ln(1 + R_gross) / (2n)
 ```
 
-Measured against bisection on all 20 points where a gross edge exists:
+Measured against bisection on every point where a gross edge exists:
 
 | | |
 |---|---|
-| points compared | 20 |
+| points compared | 15 |
 | median ratio (measured ÷ formula) | 0.9995 |
-| range | 0.9954 – 1.0004 |
+| range | 0.9985 – 1.0010 |
 
 So the quantity that matters is **gross log edge per trade**. Take-profit moves
 it because widening the target raises the edge per trade and cuts the trade
 count — both push breakeven up. Timeframe moves it for the same reason and with
 no fixed sign, which is why "use a higher timeframe" is not advice.
 
-This also explains the ragged 1D column. Its erratic rows are the ones with a
-tiny gross edge spread over many trades: at a 4% take-profit the daily rule
-returns +1.07% over 513 trades, so its per-trade edge — and therefore its cost
-tolerance — is essentially zero. Nothing about the timeframe caused that.
+This also explains the ragged 1D column. Its weak rows are the ones with a tiny
+gross edge spread over many trades: at a 4% take-profit the daily rule returns
++4.48% over 496 trades, so its per-trade edge — and therefore its cost tolerance
+— is nearly nothing. At 3% it is outright negative (−33.4%), which is why the
+cell reads 0.00: cost is not what kills that one, the rule is. Nothing about the
+timeframe caused either.
 
 ### Why the take-profit has to be read against the bar, not in per cent
 
@@ -135,12 +139,12 @@ on both sides. Fractional position sizing, per-order minimum fees, funding, or
 leverage all break it, and the direction is not obvious in advance. If you use
 any of those, measure rather than assume.
 
-## Two defects this study walked into
+## Three defects this study walked into
 
-Writing this study took two attempts before the table described the strategy it
-claimed to describe. Both causes were engine defects, both were silent, and both
-are fixed in 0.2.9. They are worth reading as a pair, because they are the same
-failure: not a crash, but a plausible number about the wrong thing.
+Writing this study took three attempts before the table described the strategy it
+claimed to describe. Every cause was an engine defect, every one was silent, and
+they are worth reading together, because they are one failure wearing three
+faces: not a crash, but a plausible number about the wrong thing.
 
 ### Exits nobody asked for
 
@@ -200,16 +204,41 @@ returned `"valid"`.
 - Eight regression tests cover the payloads that used to validate. The one that
   matters most asserts that `{}` is not a strategy.
 
-Both were found by using the engine for this study rather than by testing it,
-which is the argument for publishing research at all: a tool you only ship is a
-tool whose silent failures you never meet.
+### A bracket that reached only half the trades
+
+Fixed in **0.2.10**, and the one that took longest to find because it hides under
+correct-looking behaviour. Under `next_open` execution — the setting this study
+uses, and the only one that is not a look-ahead — roughly half of trades opened
+with no take-profit and no stop-loss despite the strategy declaring both:
+
+| execution timing | trades | opened without the declared bracket |
+|---|---:|---:|
+| `current_close` | 1,173 | 0 |
+| `next_open` | 2,309 | **1,136 (49.2%)** |
+
+The component that decides signals fills a bar earlier than the engine does, the
+two drift apart, and a re-entry after that drift carried no levels. Choosing the
+methodologically correct execution setting is what exposed it; the default hid
+it completely.
+
+Two wrong diagnoses came before the right one, both from reading part of a
+function instead of all of it. They are recorded in the engine's history rather
+than smoothed over.
 
 ### What did not change
 
-The conclusion. The table moved only at tight take-profits (1h 3%: 1.58 → 1.66;
-4h 2%: 0.61 → 0.77) and not at all from 4% up, and the identity held at a median
-ratio of 0.9995 across the re-measurement. Had it depended on which exits fired,
-it was never an identity.
+The conclusion, through all three. The identity held at a median ratio of 0.9995
+after every re-measurement, including the last one, where the table moved
+substantially — several cells fell to zero once the declared bracket actually
+applied, because with it enforced the tight take-profits have no gross edge at
+all rather than a small one.
+
+That is the useful result. Had the identity depended on which exits fired, or on
+how many trades got the bracket they asked for, it was never an identity.
+
+All three were found by using the engine for this study rather than by testing
+it, which is the argument for publishing research at all: a tool you only ship
+is a tool whose silent failures you never meet.
 
 ## Reproduce
 
@@ -231,8 +260,7 @@ cd rlx-backtester/rlxbt
 cargo build --release --bin rlx-cli --no-default-features --features offline_license
 ```
 
-The table was last regenerated against **rlx 0.2.9**, byte for byte across all
-30 measured points.
+The table was last regenerated against **rlx 0.2.10**.
 
 **Disclosure:** I build the engine used here. Which is exactly why the study
 ships the data, the rule, the commands and its own mistake: none of it should

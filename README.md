@@ -63,41 +63,44 @@ issue is welcome.
 
 ## Reproducing
 
-### What you can reproduce today, and what you cannot
-
-Being straight about this, because the repository's whole claim rests on it.
-
-The engine is available two ways, both public: the macOS app from
-[rlxbt.com](https://rlxbt.com), and the headless server image
-`ghcr.io/sergio12s/rlxbt-server` with the compose file at
+The engine is public two ways: the macOS app from [rlxbt.com](https://rlxbt.com),
+and the headless server image `ghcr.io/sergio12s/rlxbt-server` with the compose
+file at
 [rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml).
-Either will run a backtest against your own data.
 
-Neither will reproduce the tables here yet. Both studies depend on two engine
-settings — the signal execution timing, and whether a synthetic take-profit and
-stop-loss are overlaid on strategies that declare none — and those are
-command-line flags on the engine binary that the HTTP API does not currently
-expose. The binary itself is not published.
+**Use 0.2.10 or later.** Two settings these studies depend on — the signal
+execution timing, and whether a synthetic take-profit and stop-loss are overlaid
+on strategies that declare none — reached the HTTP API only in 0.2.10. Before
+that they were flags on a binary that is not published, which meant nobody but
+me could re-derive these tables. Now `POST /api/load-data` takes both:
 
-So: **the figures in these studies cannot presently be re-derived by a reader.**
-That is a defect in how the engine is distributed, not a property of the
-research, and it is being fixed by exposing both settings on the API. Until
-then, treat the tables as a claim with its method fully written down rather
-than as something you have checked.
+```json
+{
+  "path": "/var/lib/rlxbt/datasets/btc_1h_feat.csv",
+  "commission": 0.0,
+  "signal_execution_timing": "next_open",
+  "dynamic_tp_sl": false
+}
+```
 
-What *is* reproducible today against the public server image: three of the five
-probes in study 002 — whether costs are applied, whether the engine invents
-exits, and whether the validator rejects an empty strategy. Those need no flags.
+Those are the settings every study here uses, and the defaults are not them:
+execution defaults to same-bar, which lets a signal trade on the bar that
+produced it.
+
+Earlier engines will also produce different numbers for a second reason: up to
+0.2.9 roughly half of these trades ran with no take-profit or stop-loss at all
+despite the strategy declaring both. Study 001 explains what that was.
 
 ```bash
 git clone https://github.com/sergio12S/quant-research-log
-cd quant-research-log/studies/002-silent-failures
-# point probe.py at your engine; see the study for the two probes that need
-# the unexposed flags and will be skipped
+cd quant-research-log/studies/001-execution-costs
+./run.sh /path/to/engine
 ```
 
-Use **0.2.9 or later**. Earlier versions applied exit levels a strategy never
-specified.
+The bundled runners drive the engine binary. Against the server image the same
+experiment is a `load-data` call per cost level and a `run-backtest` per
+strategy — the study states every parameter it sets, so porting it is
+mechanical.
 
 The bundled datasets are small on purpose — enough to reproduce the studies,
 not enough to do your own research with. Bring your own data for that; the
