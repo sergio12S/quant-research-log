@@ -2,3 +2,7 @@
 __pycache__/
 .venv/
 *.pyc
+*_feat.csv
+_rules.json
+studies/*/data/btc_4h.csv
+studies/*/data/btc_1d.csv

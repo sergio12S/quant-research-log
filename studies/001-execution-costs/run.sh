@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Reproduces every figure in this study's README.
+#
+#   ./run.sh                       # uses `rlx-cli` from PATH
+#   ./run.sh /path/to/rlx-cli      # or point at a build
+#
+# Build the engine from https://github.com/sergio12S/rlx-backtester:
+#   cargo build --release --bin rlx-cli --no-default-features --features offline_license
+
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+RLX="${1:-rlx-cli}"
+command -v "$RLX" >/dev/null 2>&1 || [ -x "$RLX" ] || {
+  echo "engine not found: $RLX"; exit 1; }
+
+echo "engine: $("$RLX" --version 2>/dev/null || echo unknown)"
+
+# 1h is bundled; 4h and 1D are derived from it so nothing depends on a second
+# download agreeing with the first.
+[ -f data/btc_4h.csv ] || python3 resample.py data/btc_1h.csv data/btc_4h.csv 14400
+[ -f data/btc_1d.csv ] || python3 resample.py data/btc_1h.csv data/btc_1d.csv 86400
+
+mkdir -p results
+python3 breakeven.py "$RLX" | tee results/run.log
+python3 bar_ranges.py | tee results/bar_ranges.txt
+
+echo
+echo "results/breakeven.json holds the table in the README."
+echo "If a number here differs from the README, the README is wrong — open an issue."

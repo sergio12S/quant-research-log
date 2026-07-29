@@ -1,112 +1,165 @@
-# 001 — Execution cost is the binding constraint
+# 001 — What actually sets a strategy's tolerance for execution cost
 
-**Question:** at what point does the fee, rather than the signal, decide whether
-a strategy works?
+**Question:** people say a strategy needs a wide enough take-profit to survive
+fees, and that higher timeframes help. Both are folk wisdom. What sets the
+tolerance?
 
-**Short answer:** below roughly a 1.6% take-profit, it always does — and ranking
-candidates by return actively selects the ones that will fail once cost is
-applied.
+**Answer:** neither, directly. The per-side fee a strategy breaks even at is
 
-Figures are commission-only at **4.404 bps/side** unless stated. Slippage is not
-modelled, so everything here is optimistic.
+```
+breakeven_fee = ln(1 + gross_return) / (2 × trades)
+```
+
+Take-profit and timeframe matter only through their effect on those two
+numbers. This held to three decimal places on all 20 measurements below, across
+three timeframes, which is unsurprising once written down — and is exactly why
+it is worth writing down.
+
+The practical consequence: **you never need to search for a breakeven fee.** One
+frictionless backtest gives it to you in closed form, from numbers every
+backtester already reports.
 
 ---
 
-## Why this got measured at all
+## Setup
 
-An audit of 147 archived backtest reports found every one of them had been run
-frictionless. All nine strategies that had been promoted on the strength of
-those reports go negative at real cost.
+- **Data:** BTCUSDT 1h, 60,000 bars, 2019-09-04 → 2026-07-10 (6.85 years),
+  bundled in `data/`. 4h and 1D are resampled from it by `resample.py`, so no
+  figure depends on two downloads agreeing.
+- **Rule:** long when a 24-bar SMA is above a 168-bar SMA, flat otherwise, with
+  a symmetric take-profit / stop-loss bracket. Public domain, mildly profitable
+  on this data, and nobody's proprietary signal — this study is about cost
+  geometry, not about finding an edge.
+- **Execution:** `next_open`. The engine's default is `current_close`, which
+  lets a signal trade on the bar that produced it. That is a look-ahead and it
+  flatters everything.
+- **Fees:** commission only, charged on notional at entry and exit separately.
+  Slippage is **not** modelled, so every figure is optimistic.
+- **Breakeven** is found by bisecting the commission over 20 iterations, *not*
+  by the formula above — otherwise the agreement would be circular.
 
-That is a boring failure and an extremely common one. What was not obvious —
-and is the actual finding — is that the damage is not uniform. It is a function
-of the take-profit distance, and it is large enough to invert the ranking.
+## Result
 
-## Law 1 — breakeven scales with the take-profit, not with the timeframe
+Breakeven fee in basis points per side. `0.00` means the rule has no gross edge
+at that setting: cost is not what kills it.
 
-One rule, four timeframes, take-profit scaled with the timeframe. The measured
-quantity is **breakeven fee**: the per-side cost at which the strategy's gross
-edge is exactly consumed.
+| TP | 1h | 4h | 1D |
+|---:|---:|---:|---:|
+| 0.50% | 0.00 | 0.00 | 0.56 |
+| 0.75% | 0.00 | 0.00 | 0.90 |
+| 1.00% | 0.00 | 0.00 | 0.00 |
+| 1.50% | 0.48 | 0.00 | 0.00 |
+| 2.00% | 0.60 | 0.61 | 0.00 |
+| 3.00% | 1.58 | 2.37 | 0.46 |
+| 4.00% | 3.14 | 2.86 | 0.10 |
+| 6.00% | 6.42 | 11.86 | 9.95 |
+| 8.00% | 11.85 | 15.13 | 26.10 |
+| 10.00% | 16.16 | 30.49 | 44.92 |
 
-| Timeframe | Take-profit | Trades | Breakeven | vs. 4.404 bps real cost |
-|---|---:|---:|---:|---|
-| 5m | 0.5% | 5,359 | 0.30 bps | 15× short — dead |
-| 1h | 3% | 1,040 | 8.17 bps | 1.86× margin |
-| 4h | 6% | 331 | 16.99 bps | 3.86× margin |
-| 1D | 10% | 59 | 39.98 bps | 9.08× margin |
+Against a real cost of 4.404 bps/side, this rule needs a take-profit of roughly
+**5% on 1h** before cost stops being the thing that kills it. At 3% — a setting
+that sounds conservative — it breaks even at 1.58 bps and loses money in
+practice by a factor of three.
 
-That is roughly **2.7–4.0 bps of breakeven per 1% of take-profit**, which puts
-the minimum viable take-profit at about **1.63%** at this cost level.
+## What the table does not say
 
-The corollary is the part people get wrong: moving to a higher timeframe does
-nothing on its own. The same rule at 4h with a 3% take-profit breaks even at
-1.64 bps — *worse* than the 1h version at the same 3%. It is the take-profit
-that carries the relationship, and the timeframe only matters because it is
-usually changed alongside it.
+**It does not say higher timeframes help.** Read across any row: at a 3%
+take-profit the daily version tolerates *less* cost than the hourly one (0.46 vs
+1.58), and at 4% it is worse still (0.10 vs 3.14). The ordering flips again at
+6%. Timeframe is not a dial that improves cost tolerance.
 
-A 5m scalper at 0.5% take-profit is about 3× below the minimum. No amount of
-signal work fixes that; the arithmetic is upstream of the strategy.
+**It does not say breakeven rises smoothly with take-profit.** The 1D column is
+non-monotone: 0.56 → 0.90 → 0.00 → … → 0.10 → 9.95. A law that produces that
+shape is not a law.
 
-## Law 2 — ranking by return inverts the true ordering
+Both readings dissolve once you look at what the fee is actually charged on.
 
-This is the finding worth the most and it cost the most to learn.
+## The mechanism
 
-Ranked by reported (frictionless) return, the best candidate in one sweep was a
-four-leg combination showing **+308%**. At real cost it returns **−80.84%** — the
-single worst result in the set.
+With full-capital sizing, each round trip pays the fee twice on notional, so
+over `n` trades the strategy gives up `2nf` in log terms. It breaks even when
+the gross log edge equals that:
 
-The strategies that showed a modest **+19–29%** were the only ones that survived
-contact with real fees.
+```
+Σ ln(1 + rᵢ) = 2nf     ⟹     f = ln(1 + R_gross) / (2n)
+```
 
-The mechanism is not subtle once stated: return rewards trade count, and trade
-count is exactly what cost punishes. Ranking by return is therefore a filter
-that *prefers* the strategies most exposed to the thing you have not yet
-measured.
+Measured against bisection on all 20 points where a gross edge exists:
 
-Breakeven fee does not have this problem, and it has a second useful property:
-it is scale-invariant, so position sizing cannot distort it.
+| | |
+|---|---|
+| points compared | 20 |
+| median ratio (measured ÷ formula) | 1.000 |
+| range | 1.00 – 1.00 |
 
-**Rank by breakeven fee. Report return; never sort on it.**
+So the quantity that matters is **gross log edge per trade**. Take-profit moves
+it because widening the target raises the edge per trade and cuts the trade
+count — both push breakeven up. Timeframe moves it for the same reason and with
+no fixed sign, which is why "use a higher timeframe" is not advice.
 
-## The screens, in order
+This also explains the ragged 1D column. Its erratic rows are the ones with a
+tiny gross edge spread over many trades: at a 4% take-profit the daily rule
+returns +1.07% over 513 trades, so its per-trade edge — and therefore its cost
+tolerance — is essentially zero. Nothing about the timeframe caused that.
 
-Each of these was added because a false positive escaped the previous set.
-Order matters — applying them in this sequence kills candidates cheaply.
+### Why the take-profit has to be read against the bar, not in per cent
 
-1. **Return** — reported, never ranked on.
-2. **Breakeven fee** exceeds real cost, with margin.
-3. **Annualised return beats buy-and-hold** over the same window. In this
-   market that bar is roughly 30%/yr, which is brutal and is supposed to be.
-4. **Per-year market correlation** is low, and most individual years are
-   positive.
+| | bars | median range | p90 range |
+|---|---:|---:|---:|
+| 1h | 60,000 | 0.64% | 1.64% |
+| 4h | 14,986 | 1.36% | 3.31% |
+| 1D | 2,483 | 3.74% | 7.93% |
 
-Screen 3 is the one that removes the most work. A directional strategy that
-returns +1.7%/yr against a +30%/yr buy-and-hold is not a weak strategy, it is
-market beta with extra steps and worse tax treatment.
+A 0.5% take-profit on a daily bar sits well inside the median bar. Both the
+target and the stop are reachable within a single bar, so which one fills is
+decided by the engine's assumption about the order of prices inside that bar,
+not by the strategy. Those rows measure a convention.
 
-Expect this set to still be incomplete.
+The engine used here resolves fills inside the bar with an explicit high-first
+or low-first ordering rather than assuming one — but it can only do that with
+intrabar data, which this study does not supply. Every figure at a take-profit
+below roughly 1.5× the median bar range should be read as a lower bound on the
+uncertainty, not as a measurement.
 
-## Caveats worth stating plainly
+## What would change this conclusion
 
-- **Commission only.** Slippage is not modelled here. In the engine used,
-  slippage is specified in absolute currency rather than as a fraction, which is
-  an easy thing to configure wrongly by four orders of magnitude — and a wrong
-  slippage figure fails silently, in the flattering direction.
-- **Selection effect.** The survivors of the audit were picked from 39
-  real-cost trials. At a one-sided 5% bar, roughly two positives are expected by
-  chance alone. Surviving this screen is necessary, not sufficient; walk-forward
-  at real cost is the next gate and nothing here has passed it yet.
-- **One rule, one market.** The breakeven-vs-take-profit relationship was
-  measured on a single rule on BTC. The mechanism should generalise; the
-  coefficients should not be assumed to.
+The identity assumes full-capital compounding and a fee proportional to notional
+on both sides. Fractional position sizing, per-order minimum fees, funding, or
+leverage all break it, and the direction is not obvious in advance. If you use
+any of those, measure rather than assume.
+
+## A trap this study fell into
+
+The engine takes two strategy formats. The simple one names the bracket
+`take_profit` / `stop_loss`; the graph one names it `take_profit_pct` /
+`stop_loss_pct`. Unknown fields are dropped silently.
+
+Writing `take_profit_pct` in a simple-format strategy therefore runs with **no
+bracket at all**, and reports a perfectly plausible result:
+
+| field used in the simple format | trades | gross return |
+|---|---:|---:|
+| `take_profit` | 281 | +566.49% |
+| `take_profit_pct` | 3,011 | +31.97% |
+
+Same rule, same data, one suffix. The first draft of this study used the wrong
+name and would have published a table of a strategy that had no take-profit in
+it, while claiming to measure the effect of the take-profit.
+
+Nothing warned. This is the shape of the error that matters in backtesting: not
+a crash, but a silent, plausible number.
 
 ## Reproduce
 
-> **Status: not yet reproducible.** The bundled dataset and `run.sh` are being
-> prepared. Until `./run.sh` regenerates the table above, treat these figures as
-> a claim rather than as evidence — which is precisely the standard this
-> repository asks of everyone else.
-
 ```bash
-./run.sh
+./run.sh                    # rlx-cli on PATH
+./run.sh /path/to/rlx-cli
 ```
+
+Roughly 400 backtests, a few minutes. `results/breakeven.json` is the table
+above; `results/run.log` is the transcript. If a number here differs from what
+the script produces, the README is wrong — please open an issue.
+
+**Disclosure:** I build the engine used here. Which is exactly why the study
+ships the data, the rule, the commands and its own mistake: none of it should
+require taking my word for anything.

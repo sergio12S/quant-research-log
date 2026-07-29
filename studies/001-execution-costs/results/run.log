@@ -1,0 +1,33 @@
+skip 5m: no data
+ 1h  TP  0.50%  trades  14039  gross    -35.58%  breakeven    0.000 bps/side
+ 1h  TP  0.75%  trades  11289  gross    -63.31%  breakeven    0.000 bps/side
+ 1h  TP  1.00%  trades   8864  gross    -10.05%  breakeven    0.000 bps/side
+ 1h  TP  1.50%  trades   5741  gross     74.06%  breakeven    0.483 bps/side
+ 1h  TP  2.00%  trades   4003  gross     61.37%  breakeven    0.598 bps/side
+ 1h  TP  3.00%  trades   2183  gross     99.31%  breakeven    1.579 bps/side
+ 1h  TP  4.00%  trades   1397  gross    140.54%  breakeven    3.141 bps/side
+ 1h  TP  6.00%  trades    823  gross    187.96%  breakeven    6.423 bps/side
+ 1h  TP  8.00%  trades    578  gross    293.65%  breakeven   11.848 bps/side
+ 1h  TP 10.00%  trades    471  gross    358.60%  breakeven   16.158 bps/side
+ 4h  TP  0.50%  trades   3967  gross    -70.54%  breakeven    0.000 bps/side
+ 4h  TP  0.75%  trades   3922  gross    -47.01%  breakeven    0.000 bps/side
+ 4h  TP  1.00%  trades   3682  gross    -67.32%  breakeven    0.000 bps/side
+ 4h  TP  1.50%  trades   2987  gross    -65.40%  breakeven    0.000 bps/side
+ 4h  TP  2.00%  trades   2355  gross     33.08%  breakeven    0.607 bps/side
+ 4h  TP  3.00%  trades   1542  gross    107.53%  breakeven    2.367 bps/side
+ 4h  TP  4.00%  trades   1065  gross     83.88%  breakeven    2.859 bps/side
+ 4h  TP  6.00%  trades    578  gross    294.05%  breakeven   11.858 bps/side
+ 4h  TP  8.00%  trades    387  gross    222.82%  breakeven   15.131 bps/side
+ 4h  TP 10.00%  trades    280  gross    452.51%  breakeven   30.492 bps/side
+ 1D  TP  0.50%  trades    673  gross      7.79%  breakeven    0.557 bps/side
+ 1D  TP  0.75%  trades    683  gross     13.09%  breakeven    0.900 bps/side
+ 1D  TP  1.00%  trades    690  gross    -66.80%  breakeven    0.000 bps/side
+ 1D  TP  1.50%  trades    703  gross    -57.47%  breakeven    0.000 bps/side
+ 1D  TP  2.00%  trades    695  gross    -20.88%  breakeven    0.000 bps/side
+ 1D  TP  3.00%  trades    609  gross      5.77%  breakeven    0.460 bps/side
+ 1D  TP  4.00%  trades    513  gross      1.07%  breakeven    0.103 bps/side
+ 1D  TP  6.00%  trades    350  gross    100.76%  breakeven    9.950 bps/side
+ 1D  TP  8.00%  trades    253  gross    274.98%  breakeven   26.098 bps/side
+ 1D  TP 10.00%  trades    187  gross    437.66%  breakeven   44.918 bps/side
+
+wrote results/breakeven.json

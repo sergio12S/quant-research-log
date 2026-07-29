@@ -37,9 +37,9 @@ individual result.
 
 ## Studies
 
-| # | Study | Question |
+| # | Study | Finding |
 |---|---|---|
-| [001](studies/001-execution-costs/) | Execution cost is the binding constraint | At what point does the fee, not the signal, decide the outcome? |
+| [001](studies/001-execution-costs/) | What sets tolerance for execution cost | A strategy's breakeven fee is `ln(1+gross_return) / (2 × trades)`. Take-profit and timeframe matter only through those two numbers — so "use a higher timeframe" is not advice, and you never need to search for a breakeven fee. |
 
 Each study directory contains the question, the method, the figures, the
 caveats, and a `run.sh` that reproduces them from data bundled in the repo.
