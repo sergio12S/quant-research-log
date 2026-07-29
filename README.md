@@ -63,25 +63,41 @@ issue is welcome.
 
 ## Reproducing
 
-You need the engine on PATH, or a path to a build of it:
+### What you can reproduce today, and what you cannot
 
-```bash
-git clone https://github.com/sergio12S/rlx-backtester
-cd rlx-backtester/rlxbt
-cargo build --release --bin rlx-cli --no-default-features --features offline_license
-```
+Being straight about this, because the repository's whole claim rests on it.
 
-Then:
+The engine is available two ways, both public: the macOS app from
+[rlxbt.com](https://rlxbt.com), and the headless server image
+`ghcr.io/sergio12s/rlxbt-server` with the compose file at
+[rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml).
+Either will run a backtest against your own data.
+
+Neither will reproduce the tables here yet. Both studies depend on two engine
+settings — the signal execution timing, and whether a synthetic take-profit and
+stop-loss are overlaid on strategies that declare none — and those are
+command-line flags on the engine binary that the HTTP API does not currently
+expose. The binary itself is not published.
+
+So: **the figures in these studies cannot presently be re-derived by a reader.**
+That is a defect in how the engine is distributed, not a property of the
+research, and it is being fixed by exposing both settings on the API. Until
+then, treat the tables as a claim with its method fully written down rather
+than as something you have checked.
+
+What *is* reproducible today against the public server image: three of the five
+probes in study 002 — whether costs are applied, whether the engine invents
+exits, and whether the validator rejects an empty strategy. Those need no flags.
 
 ```bash
 git clone https://github.com/sergio12S/quant-research-log
-cd quant-research-log/studies/001-execution-costs
-./run.sh /path/to/rlx-cli
+cd quant-research-log/studies/002-silent-failures
+# point probe.py at your engine; see the study for the two probes that need
+# the unexposed flags and will be skipped
 ```
 
 Use **0.2.9 or later**. Earlier versions applied exit levels a strategy never
-specified, and will not reproduce these tables — the study explains what that
-was and what it cost.
+specified.
 
 The bundled datasets are small on purpose — enough to reproduce the studies,
 not enough to do your own research with. Bring your own data for that; the
