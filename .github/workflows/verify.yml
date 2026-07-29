@@ -1,0 +1,38 @@
+name: verify
+
+# Two jobs, both cheap. The guard is the one that matters: it is the last thing
+# standing between the private repository and a public one.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  leak-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refuse private-repo markers
+        run: ./scripts/leak-guard.sh --all
+
+  studies-reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Re-run every study and diff its output
+        run: |
+          # A study whose numbers no longer reproduce is worse than no study:
+          # it is a claim the repository is still making on your behalf.
+          status=0
+          for s in studies/*/; do
+            [ -x "$s/run.sh" ] || { echo "skip  $s (no runnable run.sh yet)"; continue; }
+            echo "run   $s"
+            ( cd "$s" && ./run.sh ) || { echo "FAIL  $s"; status=1; continue; }
+            if ! git diff --quiet -- "$s"; then
+              echo "DRIFT $s — regenerated output differs from what is committed"
+              git --no-pager diff --stat -- "$s"
+              status=1
+            fi
+          done
+          exit $status
