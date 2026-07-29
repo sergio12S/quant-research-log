@@ -1,0 +1,27 @@
+[
+  {
+    "probe": "costs are applied",
+    "verdict": "pass",
+    "detail": "0 bps -> +468.97%, 100 bps/side -> -98.03% over 281 trades"
+  },
+  {
+    "probe": "no exits are invented",
+    "verdict": "pass",
+    "detail": "281 trades, all exited on the rule or end of data: {'Signal': 280, 'EndOfData': 1}"
+  },
+  {
+    "probe": "no trade escapes the declared bracket",
+    "verdict": "pass",
+    "detail": "worst trade moved 1.00% against a 1% bracket (1.00x); 0 of 8515 trades exceeded 2x"
+  },
+  {
+    "probe": "execution timing",
+    "verdict": "info",
+    "detail": "current_close +469.08% vs next_open +468.97% (gap +0.11 pp). A large positive gap means the default is flattering the strategy."
+  },
+  {
+    "probe": "the validator validates",
+    "verdict": "pass",
+    "detail": "an empty object and arbitrary JSON are both rejected"
+  }
+]

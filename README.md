@@ -24,15 +24,19 @@ So this log does not try. It publishes the process instead of the outcome:
 the screens, the rejections, and the exact figures at real execution cost.
 A reader who disagrees with a conclusion can re-run it and say so.
 
-Two engine defects were found by writing the first study, both of the kind that
+Three engine defects were found by writing these studies, all of the kind that
 report a plausible number rather than failing: a backtest was being given exit
-levels the strategy never specified, and a risk bracket spelled in the wrong
-format's field names was dropped in silence. Both are fixed in rlx 0.2.9, with
-regression tests. The study says what they were, what they cost, and what the
-figures looked like before and after.
+levels the strategy never specified; a risk bracket spelled in the wrong
+format's field names was dropped in silence; and a declared bracket was reaching
+only about half of fills under the one execution setting that is not a
+look-ahead. Two are fixed in rlx 0.2.9 with regression tests, the third is
+fixed and pending release. The studies say what each was, what it cost, and
+what the figures looked like before and after.
 
 That is the argument for publishing research rather than only shipping a tool:
-a silent failure is one you only meet by using the thing.
+a silent failure is one you only meet by using the thing. Study 002 turns the
+three of them into five probes you can run against any engine, including mine —
+where one of them still fails.
 
 ## What the record currently says
 
@@ -49,6 +53,7 @@ individual result.
 
 | # | Study | Finding |
 |---|---|---|
+| [002](studies/002-silent-failures/) | Five probes for a backtest that lies quietly | Ask the engine questions whose answers you already know. Five trivial checks that between them caught three real defects — costs not applied, exits invented, a declared bracket missing from half the fills, and a validator that accepts `{}`. Runs against any engine; reports FAIL on my own release. |
 | [001](studies/001-execution-costs/) | What sets tolerance for execution cost | A strategy's breakeven fee is `ln(1+gross_return) / (2 × trades)`. Take-profit and timeframe matter only through those two numbers — so "use a higher timeframe" is not advice, and you never need to search for a breakeven fee. |
 
 Each study directory contains the question, the method, the figures, the
