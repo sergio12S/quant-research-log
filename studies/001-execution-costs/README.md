@@ -33,6 +33,9 @@ backtester already reports.
 - **Execution:** `next_open`. The engine's default is `current_close`, which
   lets a signal trade on the bar that produced it. That is a look-ahead and it
   flatters everything.
+- **Exits:** `--dynamic-tp-sl false`. The default is `true`, which adds
+  take-profit and stop-loss levels the strategy never specified — see
+  "the second trap" below.
 - **Fees:** commission only, charged on notional at entry and exit separately.
   Slippage is **not** modelled, so every figure is optimistic.
 - **Breakeven** is found by bisecting the commission over 20 iterations, *not*
@@ -48,10 +51,10 @@ at that setting: cost is not what kills it.
 | 0.50% | 0.00 | 0.00 | 0.56 |
 | 0.75% | 0.00 | 0.00 | 0.90 |
 | 1.00% | 0.00 | 0.00 | 0.00 |
-| 1.50% | 0.48 | 0.00 | 0.00 |
-| 2.00% | 0.60 | 0.61 | 0.00 |
-| 3.00% | 1.58 | 2.37 | 0.46 |
-| 4.00% | 3.14 | 2.86 | 0.10 |
+| 1.50% | 0.50 | 0.00 | 0.00 |
+| 2.00% | 0.62 | 0.77 | 0.00 |
+| 3.00% | 1.66 | 2.68 | 0.46 |
+| 4.00% | 3.14 | 3.04 | 0.10 |
 | 6.00% | 6.42 | 11.86 | 9.95 |
 | 8.00% | 11.85 | 15.13 | 26.10 |
 | 10.00% | 16.16 | 30.49 | 44.92 |
@@ -89,8 +92,8 @@ Measured against bisection on all 20 points where a gross edge exists:
 | | |
 |---|---|
 | points compared | 20 |
-| median ratio (measured ÷ formula) | 1.000 |
-| range | 1.00 – 1.00 |
+| median ratio (measured ÷ formula) | 0.9995 |
+| range | 0.9954 – 1.0004 |
 
 So the quantity that matters is **gross log edge per trade**. Take-profit moves
 it because widening the target raises the edge per trade and cuts the trade
@@ -127,6 +130,38 @@ The identity assumes full-capital compounding and a fee proportional to notional
 on both sides. Fractional position sizing, per-order minimum fees, funding, or
 leverage all break it, and the direction is not obvious in advance. If you use
 any of those, measure rather than assume.
+
+## The second trap: exits nobody asked for
+
+The engine has a `--dynamic-tp-sl` flag that defaults to **true**. With it on, a
+strategy that specifies no take-profit and no stop-loss is given some anyway.
+
+Same rule, same data, the difference is only that flag:
+
+| | trades | gross return | exits |
+|---|---:|---:|---|
+| `--dynamic-tp-sl true` (default) | 3,011 | +31.97% | StopLoss 1,872 · TakeProfit 892 · Signal 246 |
+| `--dynamic-tp-sl false` | 281 | +566.49% | Signal 280 |
+
+92% of the exits in the default run come from levels the strategy never
+contained. The rule was "hold while the fast average is above the slow one";
+what ran was that rule wrapped in a bracket the author never wrote, and the
+reported return differs by a factor of eighteen.
+
+It also explains a behaviour that looks absurd in isolation: supplying an
+unreachable stop-loss *increases* returns, because an explicit level displaces
+the synthesised ones and lets the strategy run as written.
+
+The first version of this study used the default. The figures above were
+re-measured with the layer off, so the table now describes the bracket the
+strategy actually states. The conclusions did not change — the identity held at
+a median ratio of 0.9995 across the re-run, which is the more useful result:
+if it had depended on the exit mix, it was never an identity.
+
+Whether that default is right is a product decision, not a bug report: for an
+interactive session a bracket by default is defensible. For a research run it
+means the number you publish is not about the strategy you wrote. State the
+flag explicitly, in either direction.
 
 ## A trap this study fell into
 

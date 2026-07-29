@@ -49,6 +49,11 @@ def run(data: str, tp: float, commission: float) -> dict:
             # produced it. Next open is the weakest assumption that is not a
             # look-ahead.
             "--signal-execution-timing", "next_open",
+            # The engine defaults this to true, which synthesises take-profit and
+            # stop-loss levels for strategies that specified none — and perturbs
+            # them even for strategies that did. This study is about the bracket
+            # it states, so the layer is turned off.
+            "--dynamic-tp-sl", "false",
             "--json",
         ],
         capture_output=True, text=True,

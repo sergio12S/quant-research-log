@@ -6,38 +6,38 @@
       {
         "take_profit_pct": 0.005,
         "trades": 14039,
-        "gross_return_pct": -35.5848,
+        "gross_return_pct": -23.8647,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.0075,
         "trades": 11289,
-        "gross_return_pct": -63.3103,
+        "gross_return_pct": -60.6348,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.01,
         "trades": 8864,
-        "gross_return_pct": -10.0471,
+        "gross_return_pct": -5.3662,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.015,
         "trades": 5741,
-        "gross_return_pct": 74.0617,
-        "breakeven_bps": 0.483
+        "gross_return_pct": 77.1028,
+        "breakeven_bps": 0.498
       },
       {
         "take_profit_pct": 0.02,
         "trades": 4003,
-        "gross_return_pct": 61.3671,
-        "breakeven_bps": 0.598
+        "gross_return_pct": 64.4891,
+        "breakeven_bps": 0.621
       },
       {
         "take_profit_pct": 0.03,
         "trades": 2183,
-        "gross_return_pct": 99.3065,
-        "breakeven_bps": 1.579
+        "gross_return_pct": 106.1451,
+        "breakeven_bps": 1.657
       },
       {
         "take_profit_pct": 0.04,
@@ -74,38 +74,38 @@
       {
         "take_profit_pct": 0.0075,
         "trades": 3922,
-        "gross_return_pct": -47.0139,
+        "gross_return_pct": -44.9378,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.01,
         "trades": 3682,
-        "gross_return_pct": -67.3237,
+        "gross_return_pct": -66.0433,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.015,
         "trades": 2987,
-        "gross_return_pct": -65.4023,
+        "gross_return_pct": -64.0466,
         "breakeven_bps": 0.0
       },
       {
         "take_profit_pct": 0.02,
         "trades": 2355,
-        "gross_return_pct": 33.077,
-        "breakeven_bps": 0.607
+        "gross_return_pct": 43.6449,
+        "breakeven_bps": 0.769
       },
       {
         "take_profit_pct": 0.03,
         "trades": 1542,
-        "gross_return_pct": 107.5349,
-        "breakeven_bps": 2.367
+        "gross_return_pct": 128.7181,
+        "breakeven_bps": 2.682
       },
       {
         "take_profit_pct": 0.04,
         "trades": 1065,
-        "gross_return_pct": 83.8784,
-        "breakeven_bps": 2.859
+        "gross_return_pct": 91.0833,
+        "breakeven_bps": 3.039
       },
       {
         "take_profit_pct": 0.06,
