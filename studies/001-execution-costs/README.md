@@ -33,9 +33,13 @@ backtester already reports.
 - **Execution:** `next_open`. The engine's default is `current_close`, which
   lets a signal trade on the bar that produced it. That is a look-ahead and it
   flatters everything.
-- **Exits:** `--dynamic-tp-sl false`. The default is `true`, which adds
-  take-profit and stop-loss levels the strategy never specified — see
-  "the second trap" below.
+- **Exits:** `--dynamic-tp-sl false`, so the only bracket is the one the
+  strategy states. This is the default from engine 0.2.9 onward; it is passed
+  explicitly anyway, both because a study should not depend on a default and
+  because on 0.2.8 and earlier the default was the opposite — see "two defects
+  this study walked into" below.
+- **Engine:** rlx 0.2.9. `run.sh` prints the version it ran with; earlier
+  versions will not reproduce the table.
 - **Fees:** commission only, charged on notional at entry and exit separately.
   Slippage is **not** modelled, so every figure is optimistic.
 - **Breakeven** is found by bisecting the commission over 20 iterations, *not*
@@ -131,58 +135,81 @@ on both sides. Fractional position sizing, per-order minimum fees, funding, or
 leverage all break it, and the direction is not obvious in advance. If you use
 any of those, measure rather than assume.
 
-## The second trap: exits nobody asked for
+## Two defects this study walked into
 
-The engine has a `--dynamic-tp-sl` flag that defaults to **true**. With it on, a
-strategy that specifies no take-profit and no stop-loss is given some anyway.
+Writing this study took two attempts before the table described the strategy it
+claimed to describe. Both causes were engine defects, both were silent, and both
+are fixed in 0.2.9. They are worth reading as a pair, because they are the same
+failure: not a crash, but a plausible number about the wrong thing.
 
-Same rule, same data, the difference is only that flag:
+### Exits nobody asked for
+
+`--dynamic-tp-sl` defaulted to **true**. With it on, a strategy specifying no
+take-profit and no stop-loss was given one anyway, built from the range of its
+entry bar. Same rule, same data, that flag alone:
 
 | | trades | gross return | exits |
 |---|---:|---:|---|
-| `--dynamic-tp-sl true` (default) | 3,011 | +31.97% | StopLoss 1,872 · TakeProfit 892 · Signal 246 |
-| `--dynamic-tp-sl false` | 281 | +566.49% | Signal 280 |
+| overlay on (the old default) | 3,011 | +31.97% | StopLoss 1,872 · TakeProfit 892 · Signal 246 |
+| overlay off | 281 | +566.49% | Signal 280 |
 
-92% of the exits in the default run come from levels the strategy never
-contained. The rule was "hold while the fast average is above the slow one";
-what ran was that rule wrapped in a bracket the author never wrote, and the
-reported return differs by a factor of eighteen.
+**92% of the exits belonged to levels the strategy never contained**, and the
+reported return differed by a factor of eighteen. The rule was "hold while the
+fast average is above the slow one"; what ran was that rule wrapped in a bracket
+the author never wrote.
 
-It also explains a behaviour that looks absurd in isolation: supplying an
-unreachable stop-loss *increases* returns, because an explicit level displaces
-the synthesised ones and lets the strategy run as written.
+It also explains a behaviour that reads as nonsense on its own: supplying an
+*unreachable* stop-loss raised returns — because an explicit level takes a
+different code path, and the synthetic one is then never applied.
 
-The first version of this study used the default. The figures above were
-re-measured with the layer off, so the table now describes the bracket the
-strategy actually states. The conclusions did not change — the identity held at
-a median ratio of 0.9995 across the re-run, which is the more useful result:
-if it had depended on the exit mix, it was never an identity.
+The width came from `atr_multiplier * (bar.high - bar.low)` of the single entry
+bar. There is no average in it, despite the name.
 
-Whether that default is right is a product decision, not a bug report: for an
-interactive session a bracket by default is defensible. For a research run it
-means the number you publish is not about the strategy you wrote. State the
-flag explicitly, in either direction.
-
-## A trap this study fell into
+### A bracket lost to a suffix
 
 The engine takes two strategy formats. The simple one names the bracket
 `take_profit` / `stop_loss`; the graph one names it `take_profit_pct` /
-`stop_loss_pct`. Unknown fields are dropped silently.
-
-Writing `take_profit_pct` in a simple-format strategy therefore runs with **no
-bracket at all**, and reports a perfectly plausible result:
+`stop_loss_pct`. Unknown fields were dropped silently, so the wrong name meant
+no bracket at all:
 
 | field used in the simple format | trades | gross return |
 |---|---:|---:|
 | `take_profit` | 281 | +566.49% |
 | `take_profit_pct` | 3,011 | +31.97% |
 
-Same rule, same data, one suffix. The first draft of this study used the wrong
-name and would have published a table of a strategy that had no take-profit in
-it, while claiming to measure the effect of the take-profit.
+One suffix. The first draft of this study used the wrong name and would have
+published a table of a strategy that had no take-profit in it, while claiming to
+measure the effect of the take-profit.
 
-Nothing warned. This is the shape of the error that matters in backtesting: not
-a crash, but a silent, plausible number.
+The same root cause made the validator useless: every field of the simple format
+was optional with no `deny_unknown_fields`, so `{}` and arbitrary JSON both
+returned `"valid"`.
+
+### What changed in 0.2.9
+
+- The overlay is **off by default**. It remains available as
+  `--dynamic-tp-sl true`, and a run that opts in now reports
+  `synthetic_brackets_applied` so the result says how many positions were
+  affected.
+- `atr_multiplier` renamed to `range_multiplier` and documented as a fixed 2:1
+  shape taken from one bar's noise.
+- A payload with no entry condition, or one carrying the other format's field
+  names, is now an error that names the field. Unknown fields are reported as
+  warnings. The CLI and HTTP validators share one implementation and cannot
+  disagree.
+- Eight regression tests cover the payloads that used to validate. The one that
+  matters most asserts that `{}` is not a strategy.
+
+Both were found by using the engine for this study rather than by testing it,
+which is the argument for publishing research at all: a tool you only ship is a
+tool whose silent failures you never meet.
+
+### What did not change
+
+The conclusion. The table moved only at tight take-profits (1h 3%: 1.58 → 1.66;
+4h 2%: 0.61 → 0.77) and not at all from 4% up, and the identity held at a median
+ratio of 0.9995 across the re-measurement. Had it depended on which exits fired,
+it was never an identity.
 
 ## Reproduce
 
@@ -192,8 +219,20 @@ a crash, but a silent, plausible number.
 ```
 
 Roughly 400 backtests, a few minutes. `results/breakeven.json` is the table
-above; `results/run.log` is the transcript. If a number here differs from what
-the script produces, the README is wrong — please open an issue.
+above; `results/run.log` is the transcript, and it begins with the engine
+version it ran against. If a number here differs from what the script produces,
+the README is wrong — please open an issue.
+
+Build the engine from source:
+
+```bash
+git clone https://github.com/sergio12S/rlx-backtester
+cd rlx-backtester/rlxbt
+cargo build --release --bin rlx-cli --no-default-features --features offline_license
+```
+
+The table was last regenerated against **rlx 0.2.9**, byte for byte across all
+30 measured points.
 
 **Disclosure:** I build the engine used here. Which is exactly why the study
 ships the data, the rule, the commands and its own mistake: none of it should

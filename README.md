@@ -24,6 +24,16 @@ So this log does not try. It publishes the process instead of the outcome:
 the screens, the rejections, and the exact figures at real execution cost.
 A reader who disagrees with a conclusion can re-run it and say so.
 
+Two engine defects were found by writing the first study, both of the kind that
+report a plausible number rather than failing: a backtest was being given exit
+levels the strategy never specified, and a risk bracket spelled in the wrong
+format's field names was dropped in silence. Both are fixed in rlx 0.2.9, with
+regression tests. The study says what they were, what they cost, and what the
+figures looked like before and after.
+
+That is the argument for publishing research rather than only shipping a tool:
+a silent failure is one you only meet by using the thing.
+
 ## What the record currently says
 
 No strategy in this project beats buy-and-hold. The one construction that
