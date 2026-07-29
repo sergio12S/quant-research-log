@@ -1,14 +1,13 @@
 name: verify
 
-# Two jobs, both cheap. The guard is the one that matters: it is the last thing
-# standing between the private repository and a public one.
-
 on:
   push:
   pull_request:
   workflow_dispatch:
 
 jobs:
+  # The gate that matters: the last thing standing between the private
+  # working repository and this one.
   leak-guard:
     runs-on: ubuntu-latest
     steps:
@@ -16,17 +15,45 @@ jobs:
       - name: Refuse private-repo markers
         run: ./scripts/leak-guard.sh --all
 
+  # Cheap checks that do not need the engine.
+  studies-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every study is runnable and documented
+        run: |
+          status=0
+          for s in studies/*/; do
+            [ "$s" = "studies/TEMPLATE/" ] && continue
+            [ -f "$s/README.md" ] || { echo "MISSING $s/README.md"; status=1; }
+            [ -x "$s/run.sh" ]    || { echo "MISSING or non-executable $s/run.sh"; status=1; }
+            [ -d "$s/results" ]   || { echo "MISSING $s/results"; status=1; }
+          done
+          exit $status
+      - name: Python sources parse
+        run: python3 -m compileall -q studies
+
+  # Re-running the studies needs rlx-cli, which is built from a repository
+  # this workflow cannot clone. So this job cannot be a gate here — it skips
+  # loudly rather than failing, and the real regression check is running
+  # ./run.sh locally, which is what the study asks a reader to do.
+  #
+  # Trigger it manually on a runner that has the engine on PATH.
   studies-reproduce:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
       - name: Re-run every study and diff its output
         run: |
-          # A study whose numbers no longer reproduce is worse than no study:
-          # it is a claim the repository is still making on your behalf.
+          if ! command -v rlx-cli >/dev/null 2>&1; then
+            echo "rlx-cli not on PATH — cannot reproduce here."
+            echo "Run ./run.sh locally against a build of the engine instead."
+            exit 0
+          fi
           status=0
           for s in studies/*/; do
-            [ -x "$s/run.sh" ] || { echo "skip  $s (no runnable run.sh yet)"; continue; }
+            [ -x "$s/run.sh" ] || continue
             echo "run   $s"
             ( cd "$s" && ./run.sh ) || { echo "FAIL  $s"; status=1; continue; }
             if ! git diff --quiet -- "$s"; then
