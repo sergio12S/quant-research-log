@@ -24,6 +24,8 @@ DATA = sys.argv[2] if len(sys.argv) > 2 else "data/btc_1h_feat.csv"
 
 ENTRY = {"condition": "warm > 0 && sma_fast > sma_slow", "signal": "Long", "direction": 1}
 EXIT = {"condition": "sma_fast < sma_slow", "reason": "RegimeExit"}
+# The same entry in the engine's other strategy format, for probe 4.
+SIMPLE_ENTRY = "warm > 0 && sma_fast > sma_slow"
 
 results = []
 
@@ -123,7 +125,41 @@ def probe_bracket_reaches_trades():
         record("no trade escapes the declared bracket", "pass", detail)
 
 
-# --- 4. Is the default execution timing a look-ahead? ----------------------
+# --- 4. Does the bracket work in every format the engine accepts? -----------
+# Probes 1-3 are all written in one of this engine's two strategy formats, and
+# a suite that exercises one input shape says nothing about the other. This
+# probe declares the same bracket in the other one.
+#
+# The failure it catches is not "the bracket is applied to some fills" (probe 3)
+# but "the bracket does not exist at all": a format that parses your risk
+# control, drops it, and reports a clean backtest of the strategy without it.
+def probe_bracket_in_every_format():
+    band = 0.01
+    bracketed = run({"entry_long": SIMPLE_ENTRY,
+                     "take_profit_pct": band, "stop_loss_pct": band})
+    bare = run({"entry_long": SIMPLE_ENTRY})
+    ex = exits(bracketed)
+    on_bracket = ex.get("TakeProfit", 0) + ex.get("StopLoss", 0)
+
+    if on_bracket == 0:
+        same = (bracketed["total_trades"] == bare["total_trades"]
+                and abs(bracketed["total_return"] - bare["total_return"]) < 1e-12)
+        record("the bracket survives both strategy formats", "fail",
+               f"a {band*100:.0f}% bracket produced no take-profit or stop-loss exit: {ex}. "
+               + ("The run is identical to declaring no bracket at all "
+                  f"({bare['total_trades']} trades, {bare['total_return']*100:+.2f}%) — "
+                  "the risk control was parsed and discarded."
+                  if same else
+                  f"Compare the unbracketed run: {bare['total_trades']} trades, "
+                  f"{bare['total_return']*100:+.2f}%."))
+    else:
+        record("the bracket survives both strategy formats", "pass",
+               f"{on_bracket} of {bracketed['total_trades']} trades exited on the declared "
+               f"{band*100:.0f}% bracket ({ex}); unbracketed the same rule runs "
+               f"{bare['total_trades']} trades at {bare['total_return']*100:+.2f}%")
+
+
+# --- 5. Is the default execution timing a look-ahead? ----------------------
 # Executing a signal on the bar that produced it lets the strategy trade on
 # information it did not have. Compare against the weakest honest assumption.
 def probe_execution_timing():
@@ -136,7 +172,7 @@ def probe_execution_timing():
            "A large positive gap means the default is flattering the strategy.")
 
 
-# --- 5. Does the validator validate? ----------------------------------------
+# --- 6. Does the validator validate? ----------------------------------------
 # If a validator accepts an empty object, it accepts anything, and calling it
 # before a run tells you nothing.
 def probe_validator():
@@ -165,6 +201,7 @@ def main():
     probe_costs()
     probe_phantom_exits()
     probe_bracket_reaches_trades()
+    probe_bracket_in_every_format()
     probe_execution_timing()
     probe_validator()
     Path("_probe.json").unlink(missing_ok=True)

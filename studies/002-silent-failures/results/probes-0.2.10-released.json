@@ -16,8 +16,8 @@
   },
   {
     "probe": "the bracket survives both strategy formats",
-    "verdict": "pass",
-    "detail": "14061 of 14062 trades exited on the declared 1% bracket ({'StopLoss': 7339, 'TakeProfit': 6722, 'EndOfData': 1}); unbracketed the same rule runs 1 trades at +524.83%"
+    "verdict": "fail",
+    "detail": "a 1% bracket produced no take-profit or stop-loss exit: {'EndOfData': 1}. The run is identical to declaring no bracket at all (1 trades, +524.83%) \u2014 the risk control was parsed and discarded."
   },
   {
     "probe": "execution timing",

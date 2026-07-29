@@ -189,6 +189,15 @@ The same root cause made the validator useless: every field of the simple format
 was optional with no `deny_unknown_fields`, so `{}` and arbitrary JSON both
 returned `"valid"`.
 
+0.2.9 made the wrong name an error instead of a silence. That was the right fix
+for the symptom and the wrong fix for the cause: the two formats still disagreed
+about what a bracket *is*, so an author who wanted 3% with simple rules was told
+to go and rewrite the strategy in the other format. Since **0.2.11** both formats
+accept both units — `take_profit` as an absolute price, `take_profit_pct` as a
+fraction of the entry price — and the asymmetry this section describes is gone.
+Probe 4 of [study 002](../002-silent-failures/) is what found it, and still fails
+on 0.2.10.
+
 ### What changed in 0.2.9
 
 - The overlay is **off by default**. It remains available as

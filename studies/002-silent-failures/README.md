@@ -1,12 +1,13 @@
-# 002 — Five probes for a backtest that lies quietly
+# 002 — Six probes for a backtest that lies quietly
 
 **Question:** how do you find out whether your backtester is measuring the
 strategy you wrote?
 
-**Answer:** ask it questions whose answers you already know. All five probes
-here are trivial. Between them they would have caught three real defects found
-in a single afternoon, each of which produced a plausible backtest of a
-strategy nobody had written.
+**Answer:** ask it questions whose answers you already know. All six probes here
+are trivial. Between them they have caught four real defects in the engine they
+were written against, each of which produced a plausible backtest of a strategy
+nobody had written. Three were found in a single afternoon; the fourth was found
+by this suite, after the other five had gone green.
 
 The failure mode that matters in backtesting is not a crash. A crash is free —
 you see it, you fix it. The expensive one is a number: correctly formatted,
@@ -21,8 +22,9 @@ plausibly sized, and about something else.
 | 1 | Costs are applied | A fee parameter that never reaches the fill |
 | 2 | No exits are invented | The engine adding a take-profit or stop-loss you did not declare |
 | 3 | No trade escapes the declared bracket | A bracket that reaches some fills and not others |
-| 4 | Execution timing | A default that lets a signal trade on the bar that produced it |
-| 5 | The validator validates | A pre-flight check that accepts `{}` |
+| 4 | The bracket survives both strategy formats | A risk control that one input format parses and throws away |
+| 5 | Execution timing | A default that lets a signal trade on the bar that produced it |
+| 6 | The validator validates | A pre-flight check that accepts `{}` |
 
 Run them:
 
@@ -83,7 +85,33 @@ signals filled a bar earlier than the engine and the two drifted apart. It was
 invisible under the default execution timing — **choosing the methodologically
 correct setting was what exposed it.**
 
-### 4. Execution timing
+### 4. The bracket survives both strategy formats
+
+Probe 3 asks whether the bracket reached every fill. This asks the blunter
+question first: does the bracket exist at all, in each of the formats the engine
+accepts?
+
+Declare a tight percentage bracket, then run the same rule with no bracket. If
+the two results are identical, your risk control was parsed and thrown away.
+
+This engine takes two strategy formats, and probes 1–3 are all written in one of
+them. That format was fine. The other one accepted `take_profit_pct`, dropped it,
+and returned a backtest matching the unbracketed run to the last decimal:
+
+| strategy as written | trades | return | bracket exits |
+|---|---:|---:|---|
+| 1% bracket declared | 1 | +524.83% | none |
+| no bracket declared | 1 | +524.83% | none |
+
+The format could express a bracket only as an absolute price level, so the
+obvious way to write 3% — `"take_profit": 0.03` — meant three cents. The engine
+discarded it for sitting below the entry price and said so through a log line
+with no listener attached.
+
+Fixed in 0.2.11: both formats accept both units, and a discarded level is now a
+number in the result (`brackets_dropped_invalid`) rather than a log nobody sees.
+
+### 5. Execution timing
 
 Not a pass/fail, a number to look at. Compare executing on the signal bar's
 close against the next bar's open. The first lets a strategy act on information
@@ -93,7 +121,7 @@ A large positive gap means the default is flattering you. A small one, as here,
 means this particular strategy does not depend on the difference — which is
 worth knowing before you argue about it.
 
-### 5. The validator validates
+### 6. The validator validates
 
 Submit `{}`. Submit `{"nonsense": 42}`. If either comes back valid, the
 validator is decoration, and calling it before a run tells you nothing.
@@ -106,20 +134,31 @@ a word.
 
 ## Results on the engine used here
 
-| probe | rlx 0.2.9 (released) | with the pending fix |
-|---|---|---|
-| costs are applied | PASS | PASS |
-| no exits are invented | PASS | PASS |
-| no trade escapes the declared bracket | **FAIL** (6.50×) | PASS (1.00×) |
-| execution timing | INFO, +0.11 pp gap | INFO, +0.11 pp gap |
-| the validator validates | PASS | PASS |
+| probe | rlx 0.2.9 | rlx 0.2.10 | rlx 0.2.11 |
+|---|---|---|---|
+| costs are applied | PASS | PASS | PASS |
+| no exits are invented | PASS | PASS | PASS |
+| no trade escapes the declared bracket | **FAIL** (6.50×) | PASS (1.00×) | PASS (1.00×) |
+| the bracket survives both strategy formats | — | **FAIL** | PASS |
+| execution timing | INFO, +0.11 pp gap | INFO, +0.11 pp gap | INFO, +0.11 pp gap |
+| the validator validates | PASS | PASS | PASS |
 
-Probes 1, 2 and 5 pass on 0.2.9 because the defects they describe were fixed in
-that release — each of them was a live failure a few hours earlier. Probe 3
-describes one that was not, and is the reason there will be a 0.2.10.
+Every column is a released build except the last. Each run is in `results/`,
+produced against binaries built from that release's commit.
 
-Both runs are in `results/`, produced against binaries built from the release
-commit and from the fix.
+Probes 1, 2 and 6 pass on 0.2.9 because the defects they describe were fixed in
+that release — each was a live failure a few hours earlier. Probe 3 describes one
+that was not, and is the reason there was a 0.2.10.
+
+**Probe 4 did not exist until 0.2.11, and it fails on every release before it.**
+That is the part worth dwelling on. Probes 1–3 and 5 are all written in one of
+this engine's two strategy formats, and they passed. The defect was sitting in
+the other one, where a percentage bracket was parsed, silently discarded, and the
+run reported as though no bracket had been asked for — identical to the
+unbracketed result, down to the last decimal.
+
+A suite that exercises one input shape says nothing about the other, and the
+suite could not tell me that. Only writing the strategy the other way could.
 
 ## Two mistakes worth keeping
 
@@ -142,11 +181,21 @@ suite that has never been wrong is a probe suite nobody has tested against a
 known-bad build — which is exactly why one was built here from the release
 commit on purpose.
 
+**Coverage.** A third mistake, and the largest: five green probes were taken as
+evidence about the engine when they were evidence about one of its two input
+formats. Nothing in the suite was wrong; it simply was not asked the question.
+Probe 4 exists because "all probes pass" and "the engine is sound" are different
+statements, and the gap between them is exactly the size of what you did not
+think to test.
+
 ## Reproduce
 
 ```bash
 ./probe.py /path/to/rlx-cli data/btc_1h_feat.csv
 ```
+
+To watch a probe fail, build the engine at the release it describes — probe 3
+against `v0.2.9`, probe 4 against `0.2.10` — and run the same command.
 
 `data/btc_1h_feat.csv` is generated from study 001's bundled dataset by its
 `build_features.py`. Adapting the suite to another engine means rewriting one
