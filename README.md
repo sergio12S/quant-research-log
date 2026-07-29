@@ -58,11 +58,25 @@ issue is welcome.
 
 ## Reproducing
 
+You need the engine on PATH, or a path to a build of it:
+
+```bash
+git clone https://github.com/sergio12S/rlx-backtester
+cd rlx-backtester/rlxbt
+cargo build --release --bin rlx-cli --no-default-features --features offline_license
+```
+
+Then:
+
 ```bash
 git clone https://github.com/sergio12S/quant-research-log
 cd quant-research-log/studies/001-execution-costs
-./run.sh
+./run.sh /path/to/rlx-cli
 ```
+
+Use **0.2.9 or later**. Earlier versions applied exit levels a strategy never
+specified, and will not reproduce these tables — the study explains what that
+was and what it cost.
 
 The bundled datasets are small on purpose — enough to reproduce the studies,
 not enough to do your own research with. Bring your own data for that; the
