@@ -8,3 +8,5 @@ studies/*/data/btc_4h.csv
 studies/*/data/btc_1d.csv
 studies/*/data/*_feat.csv
 studies/*/_probe.json
+studies/003-cost-screen/data
+studies/*/results/_rules.json

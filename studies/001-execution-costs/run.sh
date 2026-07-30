@@ -4,8 +4,9 @@
 #   ./run.sh                       # uses `rlx-cli` from PATH
 #   ./run.sh /path/to/rlx-cli      # or point at a build
 #
-# Build the engine from https://github.com/sergio12S/rlx-backtester:
-#   cargo build --release --bin rlx-cli --no-default-features --features offline_license
+# The engine ships as the macOS app from https://rlxbt.com (its bundled rlx-cli
+# is what this drives) or as ghcr.io/sergio12s/rlxbt-server. Its own repository
+# is private, so there is no clone-and-build path.
 
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"

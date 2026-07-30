@@ -1,0 +1,13 @@
+cost basis: 4.404 bps/side
+
+strategy                          gross   trades   size  breakeven  verdict
+sma24/168 tp=0.5% 1h             -98.7%    13568   1.00       0.00  no gross edge
+sma24/168 tp=2% 1h                16.8%     3674   1.00       0.21  DEAD
+sma24/168 tp=3% 1h                83.5%     2021   1.00       1.50  DEAD
+sma24/168 tp=6% 1h               184.9%      786   1.00       6.66  marginal
+sma24/168 tp=10% 1h              364.0%      456   1.00      16.83  survives
+sma24/168 tp=4% 1D                 4.5%      496   1.00       0.44  DEAD
+sma24/168 tp=8% 4h               188.3%      355   1.00      14.91  survives
+sma24/168 tp=3% 1h @ 20% size     21.9%     2021   0.20       2.44  DEAD
+
+8 rows, 4 cannot survive 4.404 bps/side: sma24/168 tp=2% 1h, sma24/168 tp=3% 1h, sma24/168 tp=4% 1D, sma24/168 tp=3% 1h @ 20% size

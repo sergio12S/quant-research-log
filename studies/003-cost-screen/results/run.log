@@ -1,0 +1,15 @@
+rule                size  trades     gross   formula  measured   ratio
+sma_bracket_3pct     1.0    2021    83.52%     1.502     1.502  1.0001
+sma_bracket_3pct    0.75    2021    72.40%     1.347     1.796  0.7501
+sma_bracket_3pct     0.5    2021    52.60%     1.046     2.091  0.5001
+sma_bracket_3pct     0.2    2021    21.85%     0.489     2.444  0.2000
+sma_no_bracket       1.0     281   468.97%    30.937    30.901  1.0012
+sma_no_bracket      0.75     281   318.47%    25.470    33.916  0.7510
+sma_no_bracket       0.5     281   184.27%    18.590    37.111  0.5009
+sma_no_bracket       0.2     281    59.17%     8.271    41.224  0.2006
+
+8 points. Corrected formula vs bisection: max error 0.31%, median 0.12%
+The `ratio` column is the uncorrected formula divided by the measured value.
+It equals position_size, which is what the correction removes.
+
+written to results/validation.json

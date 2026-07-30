@@ -56,6 +56,7 @@ individual result.
 
 | # | Study | Finding |
 |---|---|---|
+| [003](studies/003-cost-screen/) | Reading a published strategy table | Which rows of someone else's results are already dead at real cost, from numbers the table already reports: `ln(1+R) / (2 × trades × position_size)`. Generalises study 001's identity to fractional sizing — the correction is exactly `1/size`, measured to within 0.31% — and closes the open question 001 left. A one-way test: failing it is fatal, passing it proves nothing. |
 | [002](studies/002-silent-failures/) | Six probes for a backtest that lies quietly | Ask the engine questions whose answers you already know. Six trivial checks that between them caught four real defects — costs not applied, exits invented, a declared bracket missing from half the fills, a bracket one input format silently discarded, and a validator that accepts `{}`. Runs against any engine; reports FAIL on my own release. |
 | [001](studies/001-execution-costs/) | What sets tolerance for execution cost | A strategy's breakeven fee is `ln(1+gross_return) / (2 × trades)`. Take-profit and timeframe matter only through those two numbers — so "use a higher timeframe" is not advice, and you never need to search for a breakeven fee. |
 
