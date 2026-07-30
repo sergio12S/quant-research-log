@@ -261,15 +261,23 @@ above; `results/run.log` is the transcript, and it begins with the engine
 version it ran against. If a number here differs from what the script produces,
 the README is wrong — please open an issue.
 
-Build the engine from source:
+Get the engine. It is published two ways, both of which run this study:
 
-```bash
-git clone https://github.com/sergio12S/rlx-backtester
-cd rlx-backtester/rlxbt
-cargo build --release --bin rlx-cli --no-default-features --features offline_license
-```
+- the macOS app from [rlxbt.com](https://rlxbt.com) — the bundled `rlx-cli` is
+  what `run.sh` drives;
+- the headless server image `ghcr.io/sergio12s/rlxbt-server`, with the compose
+  file at
+  [rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml).
+  Against the server the same experiment is a `load-data` call per cost level
+  and a `run-backtest` per strategy; every parameter this study sets is stated
+  above, so porting it is mechanical.
 
-The table was last regenerated against **rlx 0.2.10**.
+The engine's own repository is private, so there is no `git clone` that works
+here — an earlier version of this section offered one, and it was a 404 for
+everyone but me. If a build from source matters to you, say so in an issue.
+
+The table was last regenerated against **rlx 0.2.11**, and reproduces
+byte-for-byte from 0.2.10.
 
 **Disclosure:** I build the engine used here. Which is exactly why the study
 ships the data, the rule, the commands and its own mistake: none of it should
