@@ -1,0 +1,52 @@
+{
+  "rows": [
+    {
+      "label": "BTC-real",
+      "anchors_evaluated": 99,
+      "holdout_confirmed": 17,
+      "candidates": 17,
+      "verdicts": {
+        "rejected": 16,
+        "promoted": 1
+      },
+      "promoted": 1
+    },
+    {
+      "label": "noise-1",
+      "anchors_evaluated": 99,
+      "holdout_confirmed": 13,
+      "candidates": 11,
+      "verdicts": {
+        "rejected": 11
+      },
+      "promoted": 0
+    },
+    {
+      "label": "noise-2",
+      "anchors_evaluated": 99,
+      "holdout_confirmed": 16,
+      "candidates": 16,
+      "verdicts": {
+        "rejected": 15,
+        "needs_more_data": 1
+      },
+      "promoted": 0
+    },
+    {
+      "label": "noise-3",
+      "anchors_evaluated": 99,
+      "holdout_confirmed": 18,
+      "candidates": 18,
+      "verdicts": {
+        "rejected": 18
+      },
+      "promoted": 0
+    }
+  ],
+  "real_promoted": 1,
+  "real_candidates": 17,
+  "noise_promoted": 0,
+  "noise_candidates": 45,
+  "fisher_one_tailed_p": 0.2742,
+  "noise_promotion_upper_bound_pct": 6.67
+}

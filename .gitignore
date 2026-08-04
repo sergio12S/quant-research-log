@@ -10,3 +10,5 @@ studies/*/data/*_feat.csv
 studies/*/_probe.json
 studies/003-cost-screen/data
 studies/*/results/_rules.json
+studies/004-pattern-noise/data
+studies/*/results/_shuffled_*.csv
