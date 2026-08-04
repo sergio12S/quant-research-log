@@ -159,7 +159,41 @@ def probe_bracket_in_every_format():
                f"{bare['total_trades']} trades at {bare['total_return']*100:+.2f}%")
 
 
-# --- 5. Is the default execution timing a look-ahead? ----------------------
+# --- 5. Does a setting you change change anything? --------------------------
+# The generalisation of probe 4, and the probe this suite was missing: a field
+# the payload states, the parser accepts, and no reported number depends on.
+#
+# Added after the suite went green and a fifth defect of exactly that shape
+# turned up anyway — `position_size`, which reached the engine's shadow
+# bookkeeping and never its sizing, so the same strategy returned +83.52% at
+# 1.0, 0.5 and 0.25 alike. Probe 4 caught one instance of the pattern by
+# checking one specific field; this checks the pattern itself.
+#
+# Point it at whatever knobs your engine claims to have. Any setting whose
+# value cannot move a single reported number is decoration.
+def probe_settings_do_something():
+    base = {"entry_rules": [ENTRY], "exit_rules": [EXIT]}
+    full = run(dict(base, position_size=1.0))
+    part = run(dict(base, position_size=0.25))
+
+    same_return = abs(full["total_return"] - part["total_return"]) < 1e-12
+    if same_return:
+        record("a setting you change changes something", "fail",
+               f"position_size 1.0 and 0.25 both returned "
+               f"{full['total_return']*100:+.2f}% over {full['total_trades']} trades — "
+               "identical to the last decimal. The field is parsed and ignored.")
+    else:
+        # Trade count must NOT move: sizing scales P&L, it does not move signals.
+        note = "" if full["total_trades"] == part["total_trades"] else (
+            f" NOTE: trade count moved {full['total_trades']} -> {part['total_trades']}; "
+            "sizing should scale P&L without changing which signals fire.")
+        record("a setting you change changes something", "pass",
+               f"position_size 1.0 -> {full['total_return']*100:+.2f}%, "
+               f"0.25 -> {part['total_return']*100:+.2f}% "
+               f"over {full['total_trades']} trades{note}")
+
+
+# --- 6. Is the default execution timing a look-ahead? ----------------------
 # Executing a signal on the bar that produced it lets the strategy trade on
 # information it did not have. Compare against the weakest honest assumption.
 def probe_execution_timing():
@@ -172,7 +206,7 @@ def probe_execution_timing():
            "A large positive gap means the default is flattering the strategy.")
 
 
-# --- 6. Does the validator validate? ----------------------------------------
+# --- 7. Does the validator validate? ----------------------------------------
 # If a validator accepts an empty object, it accepts anything, and calling it
 # before a run tells you nothing.
 def probe_validator():
@@ -202,6 +236,7 @@ def main():
     probe_phantom_exits()
     probe_bracket_reaches_trades()
     probe_bracket_in_every_format()
+    probe_settings_do_something()
     probe_execution_timing()
     probe_validator()
     Path("_probe.json").unlink(missing_ok=True)

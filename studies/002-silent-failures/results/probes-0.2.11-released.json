@@ -21,8 +21,8 @@
   },
   {
     "probe": "a setting you change changes something",
-    "verdict": "pass",
-    "detail": "position_size 1.0 -> +468.97%, 0.25 -> +76.98% over 281 trades"
+    "verdict": "fail",
+    "detail": "position_size 1.0 and 0.25 both returned +468.97% over 281 trades \u2014 identical to the last decimal. The field is parsed and ignored."
   },
   {
     "probe": "execution timing",

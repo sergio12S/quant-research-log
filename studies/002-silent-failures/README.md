@@ -1,13 +1,19 @@
-# 002 — Six probes for a backtest that lies quietly
+# 002 — Seven probes for a backtest that lies quietly
 
 **Question:** how do you find out whether your backtester is measuring the
 strategy you wrote?
 
-**Answer:** ask it questions whose answers you already know. All six probes here
-are trivial. Between them they have caught four real defects in the engine they
-were written against, each of which produced a plausible backtest of a strategy
-nobody had written. Three were found in a single afternoon; the fourth was found
-by this suite, after the other five had gone green.
+**Answer:** ask it questions whose answers you already know. All seven probes
+here are trivial. Between them they have caught five real defects in the engine
+they were written against, each of which produced a plausible backtest of a
+strategy nobody had written.
+
+The uncomfortable part is the pattern in *when* they were caught. Three releases
+in a row — 0.2.9, 0.2.10, 0.2.11 — each shipped green against the suite as it
+stood, and each failed a probe added afterwards. Every one of those probes was
+written because a defect had already been found some other way. The suite has
+never yet caught a defect before a release; it has only ever stopped one from
+coming back.
 
 The failure mode that matters in backtesting is not a crash. A crash is free —
 you see it, you fix it. The expensive one is a number: correctly formatted,
@@ -23,8 +29,9 @@ plausibly sized, and about something else.
 | 2 | No exits are invented | The engine adding a take-profit or stop-loss you did not declare |
 | 3 | No trade escapes the declared bracket | A bracket that reaches some fills and not others |
 | 4 | The bracket survives both strategy formats | A risk control that one input format parses and throws away |
-| 5 | Execution timing | A default that lets a signal trade on the bar that produced it |
-| 6 | The validator validates | A pre-flight check that accepts `{}` |
+| 5 | A setting you change changes something | Any field the parser accepts and no reported number depends on |
+| 6 | Execution timing | A default that lets a signal trade on the bar that produced it |
+| 7 | The validator validates | A pre-flight check that accepts `{}` |
 
 Run them:
 
@@ -111,7 +118,33 @@ with no listener attached.
 Fixed in 0.2.11: both formats accept both units, and a discarded level is now a
 number in the result (`brackets_dropped_invalid`) rather than a log nobody sees.
 
-### 5. Execution timing
+### 5. A setting you change changes something
+
+Probe 4 asks whether one specific field survives. This asks the general form:
+set a knob to two different values and check that any reported number moves.
+
+The engine accepted `position_size`, stored it, and read it — into a shadow
+simulation's own bookkeeping, never into the sizing. So:
+
+| `position_size` | trades | return |
+|---|---:|---:|
+| 1.0 | 281 | +468.97% |
+| 0.25 | 281 | +468.97% |
+
+Identical to the last decimal. Meanwhile the *other* strategy format rejected the
+field with "use the graph format" — advice pointing at a format that accepted it
+and ignored it.
+
+The check is one line and generalises to any engine: a setting whose value cannot
+move a single reported number is decoration. The pass case has a second
+condition worth keeping — sizing must scale P&L *without* changing the trade
+count, because an engine where it moves both is doing something else.
+
+Fixed in 0.2.12. It also mattered beyond the engine: the correction to the
+breakeven identity in [study 003](../003-cost-screen/) could not be measured at
+all while this field did nothing.
+
+### 6. Execution timing
 
 Not a pass/fail, a number to look at. Compare executing on the signal bar's
 close against the next bar's open. The first lets a strategy act on information
@@ -121,7 +154,7 @@ A large positive gap means the default is flattering you. A small one, as here,
 means this particular strategy does not depend on the difference — which is
 worth knowing before you argue about it.
 
-### 6. The validator validates
+### 7. The validator validates
 
 Submit `{}`. Submit `{"nonsense": 42}`. If either comes back valid, the
 validator is decoration, and calling it before a run tells you nothing.
@@ -134,31 +167,34 @@ a word.
 
 ## Results on the engine used here
 
-| probe | rlx 0.2.9 | rlx 0.2.10 | rlx 0.2.11 |
-|---|---|---|---|
-| costs are applied | PASS | PASS | PASS |
-| no exits are invented | PASS | PASS | PASS |
-| no trade escapes the declared bracket | **FAIL** (6.50×) | PASS (1.00×) | PASS (1.00×) |
-| the bracket survives both strategy formats | — | **FAIL** | PASS |
-| execution timing | INFO, +0.11 pp gap | INFO, +0.11 pp gap | INFO, +0.11 pp gap |
-| the validator validates | PASS | PASS | PASS |
+| probe | 0.2.9 | 0.2.10 | 0.2.11 | 0.2.12 |
+|---|---|---|---|---|
+| costs are applied | PASS | PASS | PASS | PASS |
+| no exits are invented | PASS | PASS | PASS | PASS |
+| no trade escapes the declared bracket | **FAIL** (6.50×) | PASS | PASS | PASS |
+| the bracket survives both strategy formats | — | **FAIL** | PASS | PASS |
+| a setting you change changes something | — | — | **FAIL** | PASS |
+| execution timing | INFO, +0.11 pp | INFO, +0.11 pp | INFO, +0.11 pp | INFO, +0.11 pp |
+| the validator validates | PASS | PASS | PASS | PASS |
 
-Every column is a released build except the last. Each run is in `results/`,
-produced against binaries built from that release's commit.
+Every column is a released build. Each run is in `results/`, produced against a
+binary built from that release's tag.
 
-Probes 1, 2 and 6 pass on 0.2.9 because the defects they describe were fixed in
-that release — each was a live failure a few hours earlier. Probe 3 describes one
-that was not, and is the reason there was a 0.2.10.
+Read the diagonal. Each release shipped green against the suite as it existed
+that day, and each failed a probe added later — **and every one of those probes
+was written after the defect had already been found by other means.** Probe 3
+came from a study that would not reproduce. Probe 4 came from noticing the suite
+only ever exercised one of two input formats. Probe 5 came from a fifth defect
+that turned up while writing [study 003](../003-cost-screen/), after the other
+six had gone green.
 
-**Probe 4 did not exist until 0.2.11, and it fails on every release before it.**
-That is the part worth dwelling on. Probes 1–3 and 5 are all written in one of
-this engine's two strategy formats, and they passed. The defect was sitting in
-the other one, where a percentage bracket was parsed, silently discarded, and the
-run reported as though no bracket had been asked for — identical to the
-unbracketed result, down to the last decimal.
+So the honest claim for this suite is narrow: it has never caught a defect before
+a release. It has only ever stopped one from coming back. A green run means the
+five failures below are gone, not that the engine is sound — the empty cells in
+that table are what the suite did not know to ask, and there is no reason to
+think the current column has none.
 
-A suite that exercises one input shape says nothing about the other, and the
-suite could not tell me that. Only writing the strategy the other way could.
+The dashes are the finding. Everything else is bookkeeping.
 
 ## Two mistakes worth keeping
 
@@ -181,12 +217,25 @@ suite that has never been wrong is a probe suite nobody has tested against a
 known-bad build — which is exactly why one was built here from the release
 commit on purpose.
 
-**Coverage.** A third mistake, and the largest: five green probes were taken as
-evidence about the engine when they were evidence about one of its two input
-formats. Nothing in the suite was wrong; it simply was not asked the question.
-Probe 4 exists because "all probes pass" and "the engine is sound" are different
-statements, and the gap between them is exactly the size of what you did not
-think to test.
+**Coverage, twice.** The third mistake, and the largest: five green probes were
+taken as evidence about the engine when they were evidence about one of its two
+input formats. Nothing in the suite was wrong; it simply was not asked the
+question. Probe 4 exists because "all probes pass" and "the engine is sound" are
+different statements, and the gap between them is exactly the size of what you
+did not think to test.
+
+Then it happened again, which is why this is the mistake worth naming rather than
+the one to feel bad about. With six probes green on a fresh release, a fifth
+defect turned up while writing another study: `position_size` was parsed and
+ignored. Probe 4 had checked whether one named field survived; nothing checked
+the *category* — a value the payload states that no reported number depends on.
+Probe 5 is that category, and it is the only probe here written to catch a shape
+rather than an incident.
+
+The lesson I would actually transfer: when a probe catches something, ask what
+class it belongs to before writing the fix. Four of these seven probes are
+incident-shaped, and each of them let the next instance of the same class
+through.
 
 ## Reproduce
 
@@ -195,7 +244,8 @@ think to test.
 ```
 
 To watch a probe fail, build the engine at the release it describes — probe 3
-against `v0.2.9`, probe 4 against `0.2.10` — and run the same command.
+against `server-v0.2.9`, probe 4 against `server-v0.2.10`, probe 5 against
+`server-v0.2.11` — and run the same command.
 
 `data/btc_1h_feat.csv` is generated from study 001's bundled dataset by its
 `build_features.py`. Adapting the suite to another engine means rewriting one

@@ -20,6 +20,11 @@
     "detail": "14061 of 14062 trades exited on the declared 1% bracket ({'StopLoss': 7339, 'TakeProfit': 6722, 'EndOfData': 1}); unbracketed the same rule runs 1 trades at +524.83%"
   },
   {
+    "probe": "a setting you change changes something",
+    "verdict": "pass",
+    "detail": "position_size 1.0 -> +468.97%, 0.25 -> +76.98% over 281 trades"
+  },
+  {
     "probe": "execution timing",
     "verdict": "info",
     "detail": "current_close +469.08% vs next_open +468.97% (gap +0.11 pp). A large positive gap means the default is flattering the strategy."

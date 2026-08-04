@@ -24,22 +24,30 @@ So this log does not try. It publishes the process instead of the outcome:
 the screens, the rejections, and the exact figures at real execution cost.
 A reader who disagrees with a conclusion can re-run it and say so.
 
-Four engine defects were found by writing these studies, all of the kind that
-report a plausible number rather than failing: a backtest was being given exit
-levels the strategy never specified; a risk bracket spelled in the wrong
-format's field names was dropped in silence; a declared bracket was reaching only
-about half of fills under the one execution setting that is not a look-ahead; and
-one of the two strategy formats could not express a percentage bracket at all, so
-it parsed the risk control and threw it away. Fixed in rlx 0.2.9, 0.2.10 and
-0.2.11 respectively, each with regression tests. The studies say what each was,
-what it cost, and what the figures looked like before and after.
+Five engine defects were found by writing these studies, all of the kind that
+report a plausible number rather than failing:
 
-That is the argument for publishing research rather than only shipping a tool:
-a silent failure is one you only meet by using the thing. Study 002 turns them
-into six probes you can run against any engine, including mine — where the sixth
-was written *because* the other five had gone green while a defect sat in the
-half of the engine none of them exercised. It still fails on 0.2.10, the release
-that was current when it was written, and the run is in the repo.
+- a backtest was given exit levels the strategy never specified;
+- a risk bracket spelled in the wrong format's field names was dropped in
+  silence;
+- a declared bracket reached only about half of fills under the one execution
+  setting that is not a look-ahead;
+- one of the two strategy formats could not express a percentage bracket at all,
+  so it parsed the risk control and threw it away;
+- `position_size` was parsed, stored, read — and never reached the sizing, so
+  deploying a quarter of capital returned the same number as deploying all of it.
+
+Fixed in rlx 0.2.9 through 0.2.12, each with regression tests. The studies say
+what each was, what it cost, and what the figures looked like before and after.
+
+That is the argument for publishing research rather than only shipping a tool: a
+silent failure is one you only meet by using the thing. Study 002 turns them into
+seven probes you can run against any engine — and its most useful finding is
+about itself. Three releases in a row shipped green against the suite as it stood
+that day, and each failed a probe added afterwards. Every one of those probes was
+written *after* the defect had been found by other means. The suite has never
+caught a defect before a release; it has only stopped one from coming back. Runs
+against 0.2.9, 0.2.10, 0.2.11 and 0.2.12 are all in the repo, failures included.
 
 ## What the record currently says
 
@@ -57,7 +65,7 @@ individual result.
 | # | Study | Finding |
 |---|---|---|
 | [003](studies/003-cost-screen/) | Reading a published strategy table | Which rows of someone else's results are already dead at real cost, from numbers the table already reports: `ln(1+R) / (2 × trades × position_size)`. Generalises study 001's identity to fractional sizing — the correction is exactly `1/size`, measured to within 0.31% — and closes the open question 001 left. A one-way test: failing it is fatal, passing it proves nothing. |
-| [002](studies/002-silent-failures/) | Six probes for a backtest that lies quietly | Ask the engine questions whose answers you already know. Six trivial checks that between them caught four real defects — costs not applied, exits invented, a declared bracket missing from half the fills, a bracket one input format silently discarded, and a validator that accepts `{}`. Runs against any engine; reports FAIL on my own release. |
+| [002](studies/002-silent-failures/) | Seven probes for a backtest that lies quietly | Ask the engine questions whose answers you already know. Seven trivial checks that between them caught five real defects — costs not applied, exits invented, a declared bracket missing from half the fills, a bracket one input format discarded, a sizing field that changed nothing, and a validator that accepts `{}`. Runs against any engine. Reports FAIL on three of my own released versions, and the finding is that each of those releases was green when it shipped. |
 | [001](studies/001-execution-costs/) | What sets tolerance for execution cost | A strategy's breakeven fee is `ln(1+gross_return) / (2 × trades)`. Take-profit and timeframe matter only through those two numbers — so "use a higher timeframe" is not advice, and you never need to search for a breakeven fee. |
 
 Each study directory contains the question, the method, the figures, the
@@ -72,7 +80,7 @@ and the headless server image `ghcr.io/sergio12s/rlxbt-server` with the compose
 file at
 [rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml).
 
-**Use 0.2.11 or later.** Two settings these studies depend on — the signal
+**Use 0.2.12 or later.** Two settings these studies depend on — the signal
 execution timing, and whether a synthetic take-profit and stop-loss are overlaid
 on strategies that declare none — reached the HTTP API only in 0.2.10. Before
 that they were flags on a binary that is not published, which meant nobody but
@@ -95,11 +103,16 @@ Earlier engines will also produce different numbers for a second reason: up to
 0.2.9 roughly half of these trades ran with no take-profit or stop-loss at all
 despite the strategy declaring both. Study 001 explains what that was.
 
-Both studies write their strategies in the graph format (`entry_rules`, with
-`take_profit_pct`), which is why their tables are unaffected by the 0.2.11
-defect: on 0.2.10 and earlier, the *simple* format silently discarded a
-percentage bracket. Study 001's table reproduces byte-for-byte on 0.2.11. If you
-port either study to the simple format, use 0.2.11.
+Studies 001 and 002 write their strategies in the graph format (`entry_rules`,
+with `take_profit_pct`), which is why their tables are unaffected by the defect
+0.2.11 fixed: on 0.2.10 and earlier the *simple* format silently discarded a
+percentage bracket. Study 001's table reproduces byte-for-byte from 0.2.10
+onward. If you port a study to the simple format, use 0.2.11 or later.
+
+**Study 003 needs 0.2.12 specifically.** It measures the position-size term in
+the breakeven identity, and before 0.2.12 the engine ignored `position_size`
+entirely — every sizing produced identical numbers, so the correction it reports
+could not be observed at all.
 
 ```bash
 git clone https://github.com/sergio12S/quant-research-log
