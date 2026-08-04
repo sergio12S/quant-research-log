@@ -4,7 +4,8 @@
 counts. Which rows are already dead at realistic cost, without re-running
 anything?
 
-**Short answer:** one line of arithmetic per row.
+**Short answer:** for a strategy that holds one position at a time, one line of
+arithmetic per row.
 
 ```
 breakeven_fee = ln(1 + gross_return) / (2 × trades × position_size)
@@ -14,6 +15,12 @@ This is the per-side fee at which the strategy's gross edge is exactly consumed.
 Below your real cost, the row is dead. It needs only numbers a published table
 already reports, so it costs nothing to run on anything — including work you did
 not produce and cannot re-run.
+
+**For a strategy made of several independently-capitalised sleeves, it does not
+work, and no substitution of aggregate quantities fixes it.** That is measured
+below, and it is the sharper half of this study: a blended return and a total
+trade count do not determine a portfolio's breakeven, so a table that reports
+only those cannot be screened at all.
 
 It is a **one-way test**. A row that fails is dead at the cost you named. A row
 that passes has shown only that cost is not what kills it; nothing here says the
@@ -129,6 +136,53 @@ that decides it is the edge *per trade*, not the total. And the arithmetic
 reproduces study 001's bisected breakeven column exactly, which is the internal
 check that the tool is not doing something else.
 
+## It does not survive a portfolio, and no substitution rescues it
+
+The correction above is measured for **one position at a time** at a fixed
+fraction of equity. A factor library is not that. It is N sleeves, each holding
+its own slice of capital and trading inside it, which is the case a published
+strategy table most often describes.
+
+I expected the screen to carry over with the obvious substitution: replace
+`trades × position_size` with the weighted trade count `Σ nᵢwᵢ`. That prediction
+was wrong, and so is every other aggregate I tried.
+
+| portfolio | naive ÷ measured | weighted ÷ measured | sleeve-wise ÷ measured |
+|---|---:|---:|---:|
+| equal 0.25 × 4 | 0.154 | 0.616 | **1.000** |
+| tilted 0.4/0.3/0.2/0.1 | 0.193 | 0.603 | **1.000** |
+| two sleeves 0.5/0.5 | 0.193 | 0.387 | **1.000** |
+| extreme 0.85/0.05/0.05/0.05 | 0.348 | 0.740 | **1.000** |
+| three sleeves 0.6/0.3/0.1 | 0.380 | 0.927 | **1.000** |
+
+Note the middle column especially. The weighted form is not merely biased — its
+error runs from 0.39 to 0.93 across these five, so no constant factor repairs
+it. An aggregate `(R, n)` pair does not determine a portfolio's breakeven.
+
+**Why.** Sleeve returns combine arithmetically — the portfolio's return is
+`Σ wᵢRᵢ`, verified exactly in every run — while each sleeve's own cost tolerance
+lives in logs. Mixing the two is the error. The portfolio breaks even when its
+equity returns to where it started:
+
+```
+Σ wᵢ · exp( ln(1 + Rᵢ) − 2·nᵢ·f ) = 1
+```
+
+There is no closed form for `f`; it is bisected. Agreement with the measured
+value is within 0.02% on all five configurations, which is what "sleeve-wise"
+means in the table.
+
+**The practical consequence, which is the point of this study:** you cannot
+screen a multi-sleeve strategy from a published summary row. You need `Rᵢ` and
+`nᵢ` per sleeve, and a table that reports one blended return and one total trade
+count has thrown away the information the screen needs. If a table does not say
+how many sleeves it aggregates, the honest verdict is "cannot screen", not a
+number.
+
+This bounds the tool sharply, so it is worth saying plainly where it still
+applies: a single-instrument, one-position-at-a-time strategy, which is what
+most of the rows in study 001 and most published single-rule backtests are.
+
 ## What this cannot tell you
 
 The screen answers one question and it is easy to mistake it for a larger one.
@@ -181,11 +235,23 @@ the label is there to make a long table scannable.
 ./run.sh /path/to/rlx-cli
 ```
 
-About 200 backtests, a couple of minutes. `results/validation.json` is the table
-above and `results/run.log` is the transcript. **Needs rlx 0.2.12 or later** —
-before that the engine ignored `position_size`, so every sizing produced
-identical numbers and the correction this study measures could not be observed
-at all.
+About 200 backtests, a couple of minutes. `results/validation.json` is the
+single-position table and `results/run.log` is the transcript. **Needs rlx
+0.2.12 or later** — before that the engine ignored `position_size`, so every
+sizing produced identical numbers and the correction this study measures could
+not be observed at all.
+
+The portfolio table needs the HTTP API, because `/api/portfolio` is the only
+place the multi-sleeve capital model exists — the CLI has no equivalent. `run.sh`
+runs it when an engine is listening and skips it with a note when none is, so the
+single-position result still reproduces without one. To run it alone:
+
+```bash
+./portfolio.py http://127.0.0.1:8142     # the macOS app serves this
+```
+
+Five portfolios × 21 bisection steps, each reloading 60,000 bars — roughly half
+an hour, and by far the slowest thing here. `results/portfolio.json` holds it.
 
 Screen your own table:
 

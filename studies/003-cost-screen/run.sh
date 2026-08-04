@@ -39,6 +39,19 @@ mkdir -p results
 echo
 python3 screen.py example-table.csv --cost 4.404 | tee results/example.txt
 
+# 3. The portfolio case, which needs the HTTP API rather than the CLI —
+# /api/portfolio is the only place the multi-sleeve capital model exists.
+# Skipped rather than failed when no engine is listening, so this script still
+# reproduces the single-position result on a machine without one.
+if curl -sf -o /dev/null --max-time 5 "${RLX_API:-http://127.0.0.1:8142}/api/health"; then
+  echo
+  python3 portfolio.py "${RLX_API:-http://127.0.0.1:8142}" | tee results/portfolio.log
+else
+  echo
+  echo "skipping portfolio.py: no engine on ${RLX_API:-http://127.0.0.1:8142}"
+  echo "  (start the macOS app, or set RLX_API, to reproduce the portfolio table)"
+fi
+
 echo
 echo "results/validation.json holds the measurement in the README."
 echo "If a number here differs from the README, the README is wrong — open an issue."

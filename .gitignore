@@ -12,3 +12,4 @@ studies/003-cost-screen/data
 studies/*/results/_rules.json
 studies/004-pattern-noise/data
 studies/*/results/_shuffled_*.csv
+studies/003-cost-screen/results/_btc_multi.csv
