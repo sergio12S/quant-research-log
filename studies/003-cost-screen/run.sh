@@ -19,7 +19,8 @@ RLX="${1:-rlx-cli}"
 command -v "$RLX" >/dev/null 2>&1 || [ -x "$RLX" ] || {
   echo "engine not found: $RLX"; exit 1; }
 
-echo "engine: $("$RLX" --version 2>/dev/null || echo unknown)"
+VERSION="$("$RLX" --version 2>/dev/null || echo unknown)"
+echo "engine: $VERSION"
 
 # Same dataset as study 001, linked rather than copied: three studies sharing
 # one 5 MB file should not mean three copies of it in the repository.
@@ -30,7 +31,9 @@ echo "engine: $("$RLX" --version 2>/dev/null || echo unknown)"
 mkdir -p results
 
 # 1. The screen against bisection, across position sizes.
-python3 validate.py "$RLX" | tee results/run.log
+# The version goes into the log, not only onto the terminal: a transcript that
+# does not say which build produced it cannot settle an argument later.
+{ echo "engine: $VERSION"; python3 validate.py "$RLX"; } | tee results/run.log
 
 # 2. The screen applied to a table, to show what the tool actually does.
 echo

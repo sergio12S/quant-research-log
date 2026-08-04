@@ -15,7 +15,8 @@ RLX="${1:-rlx-cli}"
 command -v "$RLX" >/dev/null 2>&1 || [ -x "$RLX" ] || {
   echo "engine not found: $RLX"; exit 1; }
 
-echo "engine: $("$RLX" --version 2>/dev/null || echo unknown)"
+VERSION="$("$RLX" --version 2>/dev/null || echo unknown)"
+echo "engine: $VERSION"
 
 # 1h is bundled; 4h and 1D are derived from it so nothing depends on a second
 # download agreeing with the first.
@@ -23,7 +24,9 @@ echo "engine: $("$RLX" --version 2>/dev/null || echo unknown)"
 [ -f data/btc_1d.csv ] || python3 resample.py data/btc_1h.csv data/btc_1d.csv 86400
 
 mkdir -p results
-python3 breakeven.py "$RLX" | tee results/run.log
+# The README says this transcript begins with the engine version. It did not:
+# the line was echoed to the terminal and never reached the file.
+{ echo "engine: $VERSION"; python3 breakeven.py "$RLX"; } | tee results/run.log
 python3 bar_ranges.py | tee results/bar_ranges.txt
 
 echo

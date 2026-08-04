@@ -1,3 +1,4 @@
+engine: rlx 0.2.12
 rule                size  trades     gross   formula  measured   ratio
 sma_bracket_3pct     1.0    2021    83.52%     1.502     1.502  1.0001
 sma_bracket_3pct    0.75    2021    72.40%     1.347     1.796  0.7501

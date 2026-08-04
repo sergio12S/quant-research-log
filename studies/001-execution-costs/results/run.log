@@ -1,3 +1,4 @@
+engine: rlx 0.2.12
 skip 5m: no data
  1h  TP  0.50%  trades  13568  gross    -98.75%  breakeven    0.000 bps/side
  1h  TP  0.75%  trades  10713  gross    -92.99%  breakeven    0.000 bps/side

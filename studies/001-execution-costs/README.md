@@ -276,8 +276,8 @@ The engine's own repository is private, so there is no `git clone` that works
 here — an earlier version of this section offered one, and it was a 404 for
 everyone but me. If a build from source matters to you, say so in an issue.
 
-The table was last regenerated against **rlx 0.2.11**, and reproduces
-byte-for-byte from 0.2.10.
+The table was last regenerated against **rlx 0.2.12**, and reproduces
+byte-for-byte from 0.2.10 onward.
 
 **Disclosure:** I build the engine used here. Which is exactly why the study
 ships the data, the rule, the commands and its own mistake: none of it should
