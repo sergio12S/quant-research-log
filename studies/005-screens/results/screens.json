@@ -1,0 +1,900 @@
+{
+  "cost_bps": 4.404,
+  "candidates": 96,
+  "with_gross_edge": 55,
+  "survive_cost": 27,
+  "spearman_return_vs_breakeven": 0.612,
+  "top5_overlap": 1,
+  "top_by_return": [
+    "fast tp=10% 1h",
+    "slow tp=10% 1h",
+    "slow tp=10% 4h",
+    "slow tp=8% 1D",
+    "fast tp=6% 1h"
+  ],
+  "top_by_breakeven": [
+    "slow tp=8% 1D",
+    "slow tp=10% 1D",
+    "trend tp=8% 1D",
+    "trend tp=10% 1D",
+    "fast tp=8% 1D"
+  ],
+  "ranked_top_by_return_but_dead_at_cost": [
+    {
+      "candidate": "fast tp=10% 1h",
+      "gross_return": 7.255946,
+      "breakeven_bps": 3.0036
+    },
+    {
+      "candidate": "fast tp=6% 1h",
+      "gross_return": 5.450964,
+      "breakeven_bps": 2.4633
+    }
+  ],
+  "rows": [
+    {
+      "candidate": "trend tp=0.5% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.005,
+      "gross_return": -0.987491,
+      "trades": 13568,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=1% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.01,
+      "gross_return": -0.759852,
+      "trades": 8351,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=2% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.02,
+      "gross_return": 0.168438,
+      "trades": 3674,
+      "breakeven_bps": 0.2119
+    },
+    {
+      "candidate": "trend tp=3% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.03,
+      "gross_return": 0.835157,
+      "trades": 2021,
+      "breakeven_bps": 1.5021
+    },
+    {
+      "candidate": "trend tp=4% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.04,
+      "gross_return": 1.03029,
+      "trades": 1303,
+      "breakeven_bps": 2.7175
+    },
+    {
+      "candidate": "trend tp=6% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.06,
+      "gross_return": 1.849013,
+      "trades": 786,
+      "breakeven_bps": 6.6601
+    },
+    {
+      "candidate": "trend tp=8% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.08,
+      "gross_return": 2.843827,
+      "trades": 541,
+      "breakeven_bps": 12.4443
+    },
+    {
+      "candidate": "trend tp=10% 1h",
+      "entry": "trend",
+      "timeframe": "1h",
+      "take_profit": 0.1,
+      "gross_return": 3.640079,
+      "trades": 456,
+      "breakeven_bps": 16.8282
+    },
+    {
+      "candidate": "fast tp=0.5% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.005,
+      "gross_return": -0.995522,
+      "trades": 14622,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=1% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.01,
+      "gross_return": -0.82232,
+      "trades": 9938,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=2% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.02,
+      "gross_return": 0.573955,
+      "trades": 5993,
+      "breakeven_bps": 0.3784
+    },
+    {
+      "candidate": "fast tp=3% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.03,
+      "gross_return": 1.161954,
+      "trades": 4703,
+      "breakeven_bps": 0.8197
+    },
+    {
+      "candidate": "fast tp=4% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.04,
+      "gross_return": 3.071643,
+      "trades": 4188,
+      "breakeven_bps": 1.6763
+    },
+    {
+      "candidate": "fast tp=6% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.06,
+      "gross_return": 5.450964,
+      "trades": 3784,
+      "breakeven_bps": 2.4633
+    },
+    {
+      "candidate": "fast tp=8% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.08,
+      "gross_return": 3.827169,
+      "trades": 3590,
+      "breakeven_bps": 2.1926
+    },
+    {
+      "candidate": "fast tp=10% 1h",
+      "entry": "fast",
+      "timeframe": "1h",
+      "take_profit": 0.1,
+      "gross_return": 7.255946,
+      "trades": 3514,
+      "breakeven_bps": 3.0036
+    },
+    {
+      "candidate": "slow tp=0.5% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.005,
+      "gross_return": -0.984871,
+      "trades": 13849,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=1% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.01,
+      "gross_return": -0.694482,
+      "trades": 8738,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=2% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.02,
+      "gross_return": 0.362877,
+      "trades": 4155,
+      "breakeven_bps": 0.3726
+    },
+    {
+      "candidate": "slow tp=3% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.03,
+      "gross_return": 1.024488,
+      "trades": 2575,
+      "breakeven_bps": 1.3695
+    },
+    {
+      "candidate": "slow tp=4% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.04,
+      "gross_return": 2.270187,
+      "trades": 1953,
+      "breakeven_bps": 3.0334
+    },
+    {
+      "candidate": "slow tp=6% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.06,
+      "gross_return": 4.128889,
+      "trades": 1503,
+      "breakeven_bps": 5.4388
+    },
+    {
+      "candidate": "slow tp=8% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.08,
+      "gross_return": 4.428527,
+      "trades": 1309,
+      "breakeven_bps": 6.4617
+    },
+    {
+      "candidate": "slow tp=10% 1h",
+      "entry": "slow",
+      "timeframe": "1h",
+      "take_profit": 0.1,
+      "gross_return": 6.50944,
+      "trades": 1219,
+      "breakeven_bps": 8.2697
+    },
+    {
+      "candidate": "narrow tp=0.5% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.005,
+      "gross_return": -0.981946,
+      "trades": 10685,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=1% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.01,
+      "gross_return": -0.904371,
+      "trades": 9725,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=2% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.02,
+      "gross_return": -0.533584,
+      "trades": 8923,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=3% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.03,
+      "gross_return": -0.632758,
+      "trades": 8640,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=4% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.04,
+      "gross_return": -0.63298,
+      "trades": 8533,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=6% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.06,
+      "gross_return": -0.548347,
+      "trades": 8459,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=8% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.08,
+      "gross_return": -0.507747,
+      "trades": 8440,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=10% 1h",
+      "entry": "narrow",
+      "timeframe": "1h",
+      "take_profit": 0.1,
+      "gross_return": -0.435444,
+      "trades": 8433,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=0.5% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.005,
+      "gross_return": -0.99335,
+      "trades": 3954,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=1% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.01,
+      "gross_return": -0.946155,
+      "trades": 3553,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=2% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.02,
+      "gross_return": -0.500246,
+      "trades": 2235,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=3% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.03,
+      "gross_return": 0.073609,
+      "trades": 1422,
+      "breakeven_bps": 0.2497
+    },
+    {
+      "candidate": "trend tp=4% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.04,
+      "gross_return": 1.093187,
+      "trades": 961,
+      "breakeven_bps": 3.8433
+    },
+    {
+      "candidate": "trend tp=6% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.06,
+      "gross_return": 1.806987,
+      "trades": 522,
+      "breakeven_bps": 9.8861
+    },
+    {
+      "candidate": "trend tp=8% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.08,
+      "gross_return": 1.882913,
+      "trades": 355,
+      "breakeven_bps": 14.9127
+    },
+    {
+      "candidate": "trend tp=10% 4h",
+      "entry": "trend",
+      "timeframe": "4h",
+      "take_profit": 0.1,
+      "gross_return": 3.162258,
+      "trades": 265,
+      "breakeven_bps": 26.9067
+    },
+    {
+      "candidate": "fast tp=0.5% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.005,
+      "gross_return": -0.994796,
+      "trades": 4193,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=1% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.01,
+      "gross_return": -0.909587,
+      "trades": 3867,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=2% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.02,
+      "gross_return": -0.294094,
+      "trades": 2628,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=3% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.03,
+      "gross_return": -0.263353,
+      "trades": 1874,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=4% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.04,
+      "gross_return": 0.499231,
+      "trades": 1493,
+      "breakeven_bps": 1.3562
+    },
+    {
+      "candidate": "fast tp=6% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.06,
+      "gross_return": 0.993263,
+      "trades": 1138,
+      "breakeven_bps": 3.0306
+    },
+    {
+      "candidate": "fast tp=8% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.08,
+      "gross_return": 2.398164,
+      "trades": 993,
+      "breakeven_bps": 6.1593
+    },
+    {
+      "candidate": "fast tp=10% 4h",
+      "entry": "fast",
+      "timeframe": "4h",
+      "take_profit": 0.1,
+      "gross_return": 3.71906,
+      "trades": 918,
+      "breakeven_bps": 8.451
+    },
+    {
+      "candidate": "slow tp=0.5% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.005,
+      "gross_return": -0.993851,
+      "trades": 3990,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=1% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.01,
+      "gross_return": -0.932378,
+      "trades": 3601,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=2% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.02,
+      "gross_return": -0.158413,
+      "trades": 2286,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=3% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.03,
+      "gross_return": 1.160326,
+      "trades": 1485,
+      "breakeven_bps": 2.5935
+    },
+    {
+      "candidate": "slow tp=4% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.04,
+      "gross_return": 1.729681,
+      "trades": 1050,
+      "breakeven_bps": 4.7818
+    },
+    {
+      "candidate": "slow tp=6% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.06,
+      "gross_return": 3.347879,
+      "trades": 632,
+      "breakeven_bps": 11.6273
+    },
+    {
+      "candidate": "slow tp=8% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.08,
+      "gross_return": 3.785813,
+      "trades": 467,
+      "breakeven_bps": 16.7629
+    },
+    {
+      "candidate": "slow tp=10% 4h",
+      "entry": "slow",
+      "timeframe": "4h",
+      "take_profit": 0.1,
+      "gross_return": 5.77588,
+      "trades": 399,
+      "breakeven_bps": 23.9771
+    },
+    {
+      "candidate": "narrow tp=0.5% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.005,
+      "gross_return": -0.969395,
+      "trades": 2770,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=1% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.01,
+      "gross_return": -0.782298,
+      "trades": 2741,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=2% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.02,
+      "gross_return": 0.332795,
+      "trades": 2530,
+      "breakeven_bps": 0.5677
+    },
+    {
+      "candidate": "narrow tp=3% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.03,
+      "gross_return": 1.181457,
+      "trades": 2374,
+      "breakeven_bps": 1.6428
+    },
+    {
+      "candidate": "narrow tp=4% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.04,
+      "gross_return": 2.276644,
+      "trades": 2286,
+      "breakeven_bps": 2.5958
+    },
+    {
+      "candidate": "narrow tp=6% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.06,
+      "gross_return": 2.386546,
+      "trades": 2188,
+      "breakeven_bps": 2.7875
+    },
+    {
+      "candidate": "narrow tp=8% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.08,
+      "gross_return": 2.91654,
+      "trades": 2160,
+      "breakeven_bps": 3.1602
+    },
+    {
+      "candidate": "narrow tp=10% 4h",
+      "entry": "narrow",
+      "timeframe": "4h",
+      "take_profit": 0.1,
+      "gross_return": 3.240699,
+      "trades": 2152,
+      "breakeven_bps": 3.3567
+    },
+    {
+      "candidate": "trend tp=0.5% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.005,
+      "gross_return": -0.88684,
+      "trades": 673,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=1% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.01,
+      "gross_return": -0.929649,
+      "trades": 690,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=2% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.02,
+      "gross_return": -0.786759,
+      "trades": 691,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=3% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.03,
+      "gross_return": -0.333996,
+      "trades": 599,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "trend tp=4% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.04,
+      "gross_return": 0.044759,
+      "trades": 496,
+      "breakeven_bps": 0.4414
+    },
+    {
+      "candidate": "trend tp=6% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.06,
+      "gross_return": 0.610753,
+      "trades": 331,
+      "breakeven_bps": 7.2009
+    },
+    {
+      "candidate": "trend tp=8% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.08,
+      "gross_return": 4.807058,
+      "trades": 230,
+      "breakeven_bps": 38.2407
+    },
+    {
+      "candidate": "trend tp=10% 1D",
+      "entry": "trend",
+      "timeframe": "1D",
+      "take_profit": 0.1,
+      "gross_return": 1.995714,
+      "trades": 175,
+      "breakeven_bps": 31.3481
+    },
+    {
+      "candidate": "fast tp=0.5% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.005,
+      "gross_return": -0.867055,
+      "trades": 655,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=1% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.01,
+      "gross_return": -0.883988,
+      "trades": 663,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=2% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.02,
+      "gross_return": -0.607241,
+      "trades": 678,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "fast tp=3% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.03,
+      "gross_return": 0.034362,
+      "trades": 601,
+      "breakeven_bps": 0.2811
+    },
+    {
+      "candidate": "fast tp=4% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.04,
+      "gross_return": 0.441079,
+      "trades": 506,
+      "breakeven_bps": 3.6106
+    },
+    {
+      "candidate": "fast tp=6% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.06,
+      "gross_return": 1.650815,
+      "trades": 383,
+      "breakeven_bps": 12.7267
+    },
+    {
+      "candidate": "fast tp=8% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.08,
+      "gross_return": 4.700023,
+      "trades": 303,
+      "breakeven_bps": 28.7206
+    },
+    {
+      "candidate": "fast tp=10% 1D",
+      "entry": "fast",
+      "timeframe": "1D",
+      "take_profit": 0.1,
+      "gross_return": 2.894942,
+      "trades": 252,
+      "breakeven_bps": 26.9778
+    },
+    {
+      "candidate": "slow tp=0.5% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.005,
+      "gross_return": -0.882921,
+      "trades": 680,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=1% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.01,
+      "gross_return": -0.929231,
+      "trades": 697,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=2% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.02,
+      "gross_return": -0.723695,
+      "trades": 699,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=3% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.03,
+      "gross_return": -0.362011,
+      "trades": 600,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "slow tp=4% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.04,
+      "gross_return": 0.169309,
+      "trades": 492,
+      "breakeven_bps": 1.5896
+    },
+    {
+      "candidate": "slow tp=6% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.06,
+      "gross_return": 0.660848,
+      "trades": 327,
+      "breakeven_bps": 7.7573
+    },
+    {
+      "candidate": "slow tp=8% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.08,
+      "gross_return": 5.483603,
+      "trades": 236,
+      "breakeven_bps": 39.6033
+    },
+    {
+      "candidate": "slow tp=10% 1D",
+      "entry": "slow",
+      "timeframe": "1D",
+      "take_profit": 0.1,
+      "gross_return": 2.917087,
+      "trades": 175,
+      "breakeven_bps": 39.01
+    },
+    {
+      "candidate": "narrow tp=0.5% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.005,
+      "gross_return": -0.774709,
+      "trades": 472,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=1% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.01,
+      "gross_return": -0.80737,
+      "trades": 474,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=2% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.02,
+      "gross_return": -0.540652,
+      "trades": 492,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=3% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.03,
+      "gross_return": -0.176493,
+      "trades": 482,
+      "breakeven_bps": 0.0
+    },
+    {
+      "candidate": "narrow tp=4% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.04,
+      "gross_return": 0.326526,
+      "trades": 466,
+      "breakeven_bps": 3.0318
+    },
+    {
+      "candidate": "narrow tp=6% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.06,
+      "gross_return": 0.552223,
+      "trades": 426,
+      "breakeven_bps": 5.1607
+    },
+    {
+      "candidate": "narrow tp=8% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.08,
+      "gross_return": 0.686235,
+      "trades": 410,
+      "breakeven_bps": 6.3719
+    },
+    {
+      "candidate": "narrow tp=10% 1D",
+      "entry": "narrow",
+      "timeframe": "1D",
+      "take_profit": 0.1,
+      "gross_return": 1.208826,
+      "trades": 399,
+      "breakeven_bps": 9.9306
+    }
+  ]
+}
