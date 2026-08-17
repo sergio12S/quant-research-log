@@ -1,0 +1,6 @@
+candidate,raw_score,probe_sharpe,probe_return_pct,max_drawdown_pct,simple_threshold_pass,note
+A,0.668,0.168,8.74,20.6,false,strongest raw nonlinear score
+B,0.341,-0.690,-41.90,46.2,false,economic probe was harmful
+C,0.346,0.190,8.10,15.3,false,positive return but weak risk-adjusted evidence
+D,,0.130,,,false,earlier nonlinear lead remained weak
+E,,,,,true,required structural re-encoding rather than a threshold on the original feature

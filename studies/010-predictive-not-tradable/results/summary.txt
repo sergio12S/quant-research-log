@@ -1,0 +1,12 @@
+candidate   raw score   probe Sharpe   threshold conversion
+---------  ----------  -------------  --------------------
+    A           0.668         +0.168  fail
+    B           0.341         -0.690  fail
+    C           0.346         +0.190  fail
+    D             n/a         +0.130  fail
+    E             n/a            n/a  pass
+
+simple-threshold failures: 4/5 (80%)
+95% Wilson interval: [37.55%, 96.38%]
+strongest raw score: 0.668; probe Sharpe +0.168
+verdict: REJECTED

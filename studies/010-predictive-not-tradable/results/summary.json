@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "candidate": "A",
+      "max_drawdown_pct": 20.6,
+      "note": "strongest raw nonlinear score",
+      "probe_return_pct": 8.74,
+      "probe_sharpe": 0.168,
+      "raw_score": 0.668,
+      "simple_threshold_pass": false
+    },
+    {
+      "candidate": "B",
+      "max_drawdown_pct": 46.2,
+      "note": "economic probe was harmful",
+      "probe_return_pct": -41.9,
+      "probe_sharpe": -0.69,
+      "raw_score": 0.341,
+      "simple_threshold_pass": false
+    },
+    {
+      "candidate": "C",
+      "max_drawdown_pct": 15.3,
+      "note": "positive return but weak risk-adjusted evidence",
+      "probe_return_pct": 8.1,
+      "probe_sharpe": 0.19,
+      "raw_score": 0.346,
+      "simple_threshold_pass": false
+    },
+    {
+      "candidate": "D",
+      "max_drawdown_pct": null,
+      "note": "earlier nonlinear lead remained weak",
+      "probe_return_pct": null,
+      "probe_sharpe": 0.13,
+      "raw_score": null,
+      "simple_threshold_pass": false
+    },
+    {
+      "candidate": "E",
+      "max_drawdown_pct": null,
+      "note": "required structural re-encoding rather than a threshold on the original feature",
+      "probe_return_pct": null,
+      "probe_sharpe": null,
+      "raw_score": null,
+      "simple_threshold_pass": true
+    }
+  ],
+  "reason": "RAW_PREDICTIVENESS_DID_NOT_IMPLY_SIMPLE_TRADABILITY",
+  "summary": {
+    "failure_rate_pct": 80.0,
+    "failure_rate_wilson_ci95_pct": [
+      37.55,
+      96.38
+    ],
+    "raw_leads": 5,
+    "simple_threshold_failures": 4,
+    "simple_threshold_passes": 1,
+    "strongest_raw_candidate": "A",
+    "strongest_raw_probe_sharpe": 0.168,
+    "strongest_raw_score": 0.668
+  },
+  "verdict": "REJECTED"
+}

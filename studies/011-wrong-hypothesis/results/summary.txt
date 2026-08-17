@@ -1,0 +1,11 @@
+audit: INVALID
+- execution direction contradicts hypothesis direction
+- direction label comes from a different interval
+
+run                              events   mean net bps   95% bootstrap CI
+-------------------------------  -------  -------------  ------------------
+invalid_long_before_impulse          400       -217.509  [-225.232, -209.621]
+corrected_short_before_impulse       400       +199.893  [+192.411, +207.450]
+separate_post_event_long             400        +61.458  [+55.413, +67.141]
+
+verdict: INVALIDATED

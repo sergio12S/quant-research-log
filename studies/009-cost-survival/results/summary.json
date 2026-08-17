@@ -1,0 +1,73 @@
+{
+  "ranking": {
+    "spearman_return_vs_breakeven": 0.938,
+    "top_ten_overlap": 6,
+    "top_ten_size": 10
+  },
+  "reason": "COST_SURVIVAL_IS_NOT_OOS_VALIDATION",
+  "robustness": {
+    "candidates": [
+      {
+        "candidate": "A",
+        "majority_oos_positive": true,
+        "monte_carlo_p05_pct": -2.3,
+        "oos_positive": 8,
+        "oos_windows": 12,
+        "passes": false,
+        "wfe": 0.25
+      },
+      {
+        "candidate": "B",
+        "majority_oos_positive": true,
+        "monte_carlo_p05_pct": -3.75,
+        "oos_positive": 8,
+        "oos_windows": 12,
+        "passes": false,
+        "wfe": 0.45
+      },
+      {
+        "candidate": "C",
+        "majority_oos_positive": true,
+        "monte_carlo_p05_pct": -4.1,
+        "oos_positive": 7,
+        "oos_windows": 12,
+        "passes": false,
+        "wfe": 0.16
+      },
+      {
+        "candidate": "D",
+        "majority_oos_positive": true,
+        "monte_carlo_p05_pct": -7.29,
+        "oos_positive": 7,
+        "oos_windows": 12,
+        "passes": false,
+        "wfe": 0.12
+      },
+      {
+        "candidate": "E",
+        "majority_oos_positive": false,
+        "monte_carlo_p05_pct": -8.34,
+        "oos_positive": 6,
+        "oos_windows": 12,
+        "passes": false,
+        "wfe": 0.09
+      }
+    ],
+    "gates": {
+      "monte_carlo_p05_above_zero": true,
+      "strict_majority_oos_positive": true,
+      "wfe_minimum": 0.5
+    },
+    "passed": 0,
+    "tested": 5
+  },
+  "search": {
+    "configs": 200,
+    "cost_survival_pct": 27.04,
+    "cost_survivors": 53,
+    "eligible_minimum_trade_count": 196,
+    "expected_nominal_false_winners_at_5pct": 10.0,
+    "probability_at_least_one_nominal_false_winner_pct": 99.9965
+  },
+  "verdict": "REJECTED"
+}

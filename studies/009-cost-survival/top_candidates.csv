@@ -1,0 +1,6 @@
+candidate,wfe,oos_positive,oos_windows,monte_carlo_p05_pct
+A,0.25,8,12,-2.30
+B,0.45,8,12,-3.75
+C,0.16,7,12,-4.10
+D,0.12,7,12,-7.29
+E,0.09,6,12,-8.34

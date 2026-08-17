@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "title": "A predictive feature is not automatically a tradable rule",
+  "verdict": {
+    "status": "REJECTED",
+    "reasonCode": "RAW_PREDICTIVENESS_DID_NOT_IMPLY_SIMPLE_TRADABILITY"
+  },
+  "evidence": {
+    "rawLeads": 5,
+    "simpleThresholdFailures": 4,
+    "simpleThresholdPasses": 1,
+    "strongestRawScore": 0.668,
+    "strongestRawProbeSharpe": 0.168
+  },
+  "periods": {
+    "workflow": "raw validation followed by frozen economic strategy probes",
+    "selection": "bounded quantile-threshold conversion attempts"
+  },
+  "limitations": [
+    "Only five leads, so the 80% failure fraction is not a stable population estimate",
+    "Public candidates are anonymized to avoid releasing a private feature set",
+    "Failure of a univariate threshold does not disprove multivariate usefulness",
+    "The one conversion required structural re-encoding rather than threshold tuning"
+  ],
+  "reopeningConditions": [
+    "A frozen economic probe passes costs and chronological validation",
+    "A multivariate model is preregistered before inspecting final outcomes",
+    "The conversion works across more than one dataset"
+  ]
+}

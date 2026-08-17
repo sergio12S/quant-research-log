@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "title": "Clearing trading costs is not out-of-sample validation",
+  "verdict": {
+    "status": "REJECTED",
+    "reasonCode": "COST_SURVIVAL_IS_NOT_OOS_VALIDATION"
+  },
+  "evidence": {
+    "configsSearched": 200,
+    "eligibleConfigs": 196,
+    "costSurvivors": 53,
+    "topCandidatesRobustnessTested": 5,
+    "fullGatePasses": 0
+  },
+  "periods": {
+    "evaluation": "twelve non-overlapping chronological OOS windows",
+    "selection": "breakeven-fee ranking before robustness gates"
+  },
+  "limitations": [
+    "One homogeneous parameter grid",
+    "Aggregate public evidence intentionally omits private feature definitions",
+    "Commission is modelled but slippage is zero",
+    "Nominal false-winner expectation is illustrative; the final decision used joint robustness gates"
+  ],
+  "reopeningConditions": [
+    "A candidate passes WFE, majority-positive OOS, and Monte Carlo lower-tail gates together",
+    "The result survives a new untouched corpus",
+    "The candidate remains distinct from benchmark drift"
+  ]
+}

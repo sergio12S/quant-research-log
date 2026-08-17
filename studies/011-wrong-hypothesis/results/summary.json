@@ -1,0 +1,65 @@
+{
+  "audit": {
+    "mismatches": [
+      "execution direction contradicts hypothesis direction",
+      "direction label comes from a different interval"
+    ],
+    "valid": false
+  },
+  "contract": {
+    "execution_in_invalid_run": {
+      "direction": "long",
+      "interval": "precursor_to_impulse"
+    },
+    "hypothesis": {
+      "direction": "short",
+      "feature_window": "pre_event",
+      "target_interval": "precursor_to_impulse"
+    },
+    "label_used_by_invalid_run": {
+      "direction": "long",
+      "interval": "impulse_to_response"
+    }
+  },
+  "outcomes": {
+    "corrected_short_before_impulse": {
+      "events": 400,
+      "mean_ci95_bps": [
+        192.411,
+        207.45
+      ],
+      "mean_net_bps": 199.893,
+      "median_net_bps": 204.179,
+      "positive_pct": 99.25
+    },
+    "invalid_long_before_impulse": {
+      "events": 400,
+      "mean_ci95_bps": [
+        -225.232,
+        -209.621
+      ],
+      "mean_net_bps": -217.509,
+      "median_net_bps": -221.795,
+      "positive_pct": 0.25
+    },
+    "separate_post_event_long": {
+      "events": 400,
+      "mean_ci95_bps": [
+        55.413,
+        67.141
+      ],
+      "mean_net_bps": 61.458,
+      "median_net_bps": 61.866,
+      "positive_pct": 86.0
+    }
+  },
+  "reason": "LABEL_DIRECTION_INTERVAL_MISMATCH",
+  "synthetic_fixture": {
+    "commission_bps_per_side": 4.404,
+    "events": 400,
+    "rebound_mean": 0.007,
+    "seed": 11011,
+    "shock_mean": -0.02
+  },
+  "verdict": "INVALIDATED"
+}

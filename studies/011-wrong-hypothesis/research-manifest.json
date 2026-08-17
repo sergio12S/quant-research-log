@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "title": "A backtest can test the opposite of its stated hypothesis",
+  "verdict": {
+    "status": "INVALIDATED",
+    "reasonCode": "LABEL_DIRECTION_INTERVAL_MISMATCH"
+  },
+  "evidence": {
+    "fixture": "deterministic synthetic events",
+    "events": 400,
+    "contractMismatches": 2,
+    "bootstrapIterations": 2000
+  },
+  "periods": {
+    "feature": "pre-event",
+    "hypothesisTarget": "precursor to impulse",
+    "incorrectDirectionSource": "impulse to response"
+  },
+  "limitations": [
+    "The public fixture is synthetic and demonstrates semantics rather than market profitability",
+    "Its return magnitudes are intentionally separated so the direction error is visually obvious",
+    "The invalid historical run is not used as evidence for either direction"
+  ],
+  "reopeningConditions": [
+    "Feature window, target interval, execution interval, and direction all agree in a frozen contract",
+    "The corrected hypothesis is evaluated on an untouched sample",
+    "Invalid-run metrics remain quarantined from strategy evidence"
+  ]
+}

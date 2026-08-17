@@ -1,0 +1,16 @@
+search: 200 configs; 196 met the trade-count floor
+cost survivors: 53/196 (27.04%)
+nominal 5% winners expected by chance: 10.0
+P(at least one nominal false winner): 99.9965%
+return/breakeven top-10 overlap: 6/10; Spearman 0.938
+
+candidate   WFE   positive OOS   MC p05    passes all gates
+---------  ----  -------------  --------  ----------------
+    A      0.25      8/12        -2.30%       no
+    B      0.45      8/12        -3.75%       no
+    C      0.16      7/12        -4.10%       no
+    D      0.12      7/12        -7.29%       no
+    E      0.09      6/12        -8.34%       no
+
+robust passes: 0/5
+verdict: REJECTED
