@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/social-preview.png" alt="Quant Research Log — reproducible failures, backtesting probes, evidence" width="100%">
+</p>
+
 # Quant research log
 
 A public record of systematic-trading research: what was tested, what died, and
