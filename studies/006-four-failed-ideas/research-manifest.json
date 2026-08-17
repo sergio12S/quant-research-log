@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "title": "Four plausible trading ideas that failed after costs",
+  "verdict": {
+    "status": "REJECTED",
+    "reasonCode": "NO_ECONOMIC_EDGE"
+  },
+  "evidence": {
+    "experiments": 4,
+    "negativeFinalExpectancy": 4,
+    "chronologicalValidation": true,
+    "walkForward": true
+  },
+  "periods": {
+    "decisionTiming": "next open",
+    "evaluation": "chronological out of sample"
+  },
+  "limitations": [
+    "This public package is a synthesis of frozen final metrics, not a release of private feature-level datasets.",
+    "The four experiments used different horizons and therefore should not be pooled into one effect estimate.",
+    "Slippage and spread assumptions differ from commission-only studies elsewhere in this repository."
+  ],
+  "reopeningConditions": [
+    "A genuinely untouched period with positive net expectancy",
+    "A directional mechanism distinct from magnitude prediction",
+    "Historical data at a cadence matched to the trading horizon"
+  ]
+}

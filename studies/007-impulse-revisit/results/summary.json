@@ -1,0 +1,125 @@
+{
+  "costs": {
+    "commission_bps_per_side": 4.404,
+    "slippage_bps": 0.0
+  },
+  "dataset": {
+    "bars": 60000,
+    "first_timestamp": 1567566000,
+    "last_timestamp": 1783692000
+  },
+  "parameters": {
+    "barrier_atr": 0.5,
+    "body_ratio": 0.6,
+    "close_position": 0.8,
+    "entry": "next_open",
+    "hold_bars": 12,
+    "max_revisit_bars": 500,
+    "range_multiple": 2.0,
+    "revisit_delay_bars": 3,
+    "volume_multiple": 1.5
+  },
+  "variants": {
+    "range_and_volume": {
+      "events_total": 830,
+      "parameters": {
+        "require_volume_confirmation": true
+      },
+      "partitions": {
+        "discovery": {
+          "down_first": 251,
+          "events": 438,
+          "mean_gross_bps": -4.574,
+          "mean_net_bps": -13.382,
+          "mean_net_ci95_bps": [
+            -18.404,
+            -8.2
+          ],
+          "median_net_bps": -31.317,
+          "positive_net_pct": 42.69,
+          "timeouts": 0,
+          "up_first": 187
+        },
+        "final": {
+          "down_first": 102,
+          "events": 183,
+          "mean_gross_bps": -2.209,
+          "mean_net_bps": -11.017,
+          "mean_net_ci95_bps": [
+            -16.153,
+            -5.691
+          ],
+          "median_net_bps": -22.635,
+          "positive_net_pct": 44.26,
+          "timeouts": 0,
+          "up_first": 81
+        },
+        "validation": {
+          "down_first": 133,
+          "events": 209,
+          "mean_gross_bps": -8.937,
+          "mean_net_bps": -17.745,
+          "mean_net_ci95_bps": [
+            -22.95,
+            -12.416
+          ],
+          "median_net_bps": -35.095,
+          "positive_net_pct": 36.36,
+          "timeouts": 0,
+          "up_first": 76
+        }
+      }
+    },
+    "range_only": {
+      "events_total": 939,
+      "parameters": {
+        "require_volume_confirmation": false
+      },
+      "partitions": {
+        "discovery": {
+          "down_first": 290,
+          "events": 497,
+          "mean_gross_bps": -4.97,
+          "mean_net_bps": -13.778,
+          "mean_net_ci95_bps": [
+            -18.468,
+            -9.034
+          ],
+          "median_net_bps": -31.139,
+          "positive_net_pct": 41.65,
+          "timeouts": 0,
+          "up_first": 207
+        },
+        "final": {
+          "down_first": 115,
+          "events": 205,
+          "mean_gross_bps": -2.566,
+          "mean_net_bps": -11.374,
+          "mean_net_ci95_bps": [
+            -16.007,
+            -6.347
+          ],
+          "median_net_bps": -23.201,
+          "positive_net_pct": 43.9,
+          "timeouts": 0,
+          "up_first": 90
+        },
+        "validation": {
+          "down_first": 147,
+          "events": 237,
+          "mean_gross_bps": -7.23,
+          "mean_net_bps": -16.038,
+          "mean_net_ci95_bps": [
+            -20.892,
+            -11.193
+          ],
+          "median_net_bps": -33.439,
+          "positive_net_pct": 37.97,
+          "timeouts": 0,
+          "up_first": 90
+        }
+      }
+    }
+  },
+  "verdict": "REJECTED"
+}

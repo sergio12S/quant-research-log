@@ -1,0 +1,69 @@
+{
+  "best_final_net_ev_bps": -4.19,
+  "experiment_count": 4,
+  "experiments": [
+    {
+      "cross_asset": {
+        "positive": null,
+        "total": null
+      },
+      "decision": "classification lift did not survive costs",
+      "experiment": "Selective ML",
+      "final_net_ev_bps": -9.19,
+      "promising_metric": "UP precision",
+      "promising_value": 66.21,
+      "walk_forward": {
+        "positive": 2,
+        "total": 5
+      }
+    },
+    {
+      "cross_asset": {
+        "positive": 0,
+        "total": 17
+      },
+      "decision": "magnitude information did not supply direction",
+      "experiment": "Order-book magnitude gate",
+      "final_net_ev_bps": -21.71,
+      "promising_metric": "ROC-AUC improvement",
+      "promising_value": 0.027,
+      "walk_forward": {
+        "positive": null,
+        "total": null
+      }
+    },
+    {
+      "cross_asset": {
+        "positive": null,
+        "total": null
+      },
+      "decision": "a smaller loss was still a loss",
+      "experiment": "Lagged macro regime",
+      "final_net_ev_bps": -4.19,
+      "promising_metric": "net EV improvement bps",
+      "promising_value": 4.26,
+      "walk_forward": {
+        "positive": 1,
+        "total": 3
+      }
+    },
+    {
+      "cross_asset": {
+        "positive": null,
+        "total": null
+      },
+      "decision": "daily state was too slow for four-hour timing",
+      "experiment": "Bitcoin network state",
+      "final_net_ev_bps": -6.5,
+      "promising_metric": "direction ROC-AUC change",
+      "promising_value": -0.0136,
+      "walk_forward": {
+        "positive": 0,
+        "total": 3
+      }
+    }
+  ],
+  "negative_final_ev_count": 4,
+  "verdict": "REJECTED",
+  "worst_final_net_ev_bps": -21.71
+}

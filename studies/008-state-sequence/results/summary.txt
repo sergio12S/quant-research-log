@@ -1,0 +1,13 @@
+cohort       partition    events   mean net bps   95% bootstrap CI
+-----------  -----------  -------  -------------  ------------------
+ordered      discovery        301        -19.905  [-42.974, +1.296]
+reversed     discovery        163         -6.733  [-34.453, +20.196]
+failure_only  discovery        462        -14.834  [-32.100, +1.486]
+ordered      validation       116        -25.494  [-55.441, +3.704]
+reversed     validation        47        -37.293  [-89.220, +11.860]
+failure_only  validation       159        -19.627  [-39.864, +0.389]
+ordered      final            122         +3.472  [-14.924, +22.094]
+reversed     final             36        -27.534  [-73.661, +18.130]
+failure_only  final            143         -6.448  [-25.251, +11.247]
+
+verdict: REJECTED (NO_INCREMENTAL_OOS_EDGE)

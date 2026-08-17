@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "title": "Did an ordered market-state chain add value beyond a failed breakout?",
+  "verdict": {
+    "status": "REJECTED",
+    "reasonCode": "NO_INCREMENTAL_OOS_EDGE"
+  },
+  "evidence": {
+    "bars": 60000,
+    "orderedEvents": 539,
+    "finalOrderedEvents": 122,
+    "finalOrderedMeanNetBps": 3.472,
+    "finalOrderedCi95Bps": [-14.924, 22.094],
+    "finalIncrementalCi95Bps": [-16.824, 36.388],
+    "bootstrapIterations": 2000
+  },
+  "periods": {
+    "full": "2019-09-04T03:00:00Z/2026-07-10T14:00:00Z",
+    "discovery": "2019-09-04T03:00:00Z/2023-10-14T14:00:00Z",
+    "validation": "2023-10-14T15:00:00Z/2025-02-25T14:00:00Z",
+    "final": "2025-02-25T15:00:00Z/2026-07-10T14:00:00Z"
+  },
+  "limitations": [
+    "One instrument and one-hour bars",
+    "Price and volume states only; derivatives positioning is not modelled",
+    "Commission is modelled but spread and slippage are not",
+    "The final positive point estimate is imprecise and contradicted by discovery and validation"
+  ],
+  "reopeningConditions": [
+    "A preregistered chain with a positive incremental interval on a new untouched sample",
+    "Consistent sign across discovery, validation, and final periods",
+    "Positive economics after spread and slippage"
+  ]
+}

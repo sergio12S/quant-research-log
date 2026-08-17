@@ -1,0 +1,9 @@
+experiment                      final net EV     robustness
+------------------------------  ---------------  ------------------------
+Selective ML                         -9.19 bps  WF 2/5 positive
+Order-book magnitude gate           -21.71 bps  assets 0/17 positive
+Lagged macro regime                  -4.19 bps  WF 1/3 positive
+Bitcoin network state                -6.50 bps  WF 0/3 positive
+
+verdict: REJECTED
+negative final expectancy: 4/4 experiments

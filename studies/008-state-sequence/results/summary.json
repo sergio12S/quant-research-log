@@ -1,0 +1,125 @@
+{
+  "dataset": {
+    "bars": 60000,
+    "first_timestamp": 1567566000,
+    "last_timestamp": 1783692000
+  },
+  "parameters": {
+    "buy_pressure": "body/range >= 0.60 and close in top 20%",
+    "commission_bps_per_side": 4.404,
+    "entry": "next_open",
+    "failed_breakout": "high exceeds prior 24-bar high and close returns below it",
+    "hold_bars": 6,
+    "sequence_window_bars": 8,
+    "volume_threshold": "past 168-bar 80th percentile"
+  },
+  "partitions": {
+    "discovery": {
+      "cohorts": {
+        "failure_only": {
+          "events": 462,
+          "mean_net_bps": -14.834,
+          "mean_net_ci95_bps": [
+            -32.1,
+            1.486
+          ],
+          "positive_net_pct": 53.9
+        },
+        "ordered": {
+          "events": 301,
+          "mean_net_bps": -19.905,
+          "mean_net_ci95_bps": [
+            -42.974,
+            1.296
+          ],
+          "positive_net_pct": 47.51
+        },
+        "reversed": {
+          "events": 163,
+          "mean_net_bps": -6.733,
+          "mean_net_ci95_bps": [
+            -34.453,
+            20.196
+          ],
+          "positive_net_pct": 49.69
+        }
+      },
+      "ordered_minus_failure_only_ci95_bps": [
+        -31.999,
+        21.811
+      ]
+    },
+    "final": {
+      "cohorts": {
+        "failure_only": {
+          "events": 143,
+          "mean_net_bps": -6.448,
+          "mean_net_ci95_bps": [
+            -25.251,
+            11.247
+          ],
+          "positive_net_pct": 44.06
+        },
+        "ordered": {
+          "events": 122,
+          "mean_net_bps": 3.472,
+          "mean_net_ci95_bps": [
+            -14.924,
+            22.094
+          ],
+          "positive_net_pct": 54.92
+        },
+        "reversed": {
+          "events": 36,
+          "mean_net_bps": -27.534,
+          "mean_net_ci95_bps": [
+            -73.661,
+            18.13
+          ],
+          "positive_net_pct": 36.11
+        }
+      },
+      "ordered_minus_failure_only_ci95_bps": [
+        -16.824,
+        36.388
+      ]
+    },
+    "validation": {
+      "cohorts": {
+        "failure_only": {
+          "events": 159,
+          "mean_net_bps": -19.627,
+          "mean_net_ci95_bps": [
+            -39.864,
+            0.389
+          ],
+          "positive_net_pct": 51.57
+        },
+        "ordered": {
+          "events": 116,
+          "mean_net_bps": -25.494,
+          "mean_net_ci95_bps": [
+            -55.441,
+            3.704
+          ],
+          "positive_net_pct": 43.97
+        },
+        "reversed": {
+          "events": 47,
+          "mean_net_bps": -37.293,
+          "mean_net_ci95_bps": [
+            -89.22,
+            11.86
+          ],
+          "positive_net_pct": 48.94
+        }
+      },
+      "ordered_minus_failure_only_ci95_bps": [
+        -44.908,
+        29.019
+      ]
+    }
+  },
+  "reason": "NO_INCREMENTAL_OOS_EDGE",
+  "verdict": "REJECTED"
+}

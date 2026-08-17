@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "title": "Does a bullish impulse bar become support on first revisit?",
+  "verdict": {
+    "status": "REJECTED",
+    "reasonCode": "NEGATIVE_OOS_EXPECTANCY"
+  },
+  "evidence": {
+    "bars": 60000,
+    "rangeOnlyEvents": 939,
+    "rangeAndVolumeEvents": 830,
+    "finalRangeOnlyEvents": 205,
+    "finalRangeAndVolumeEvents": 183,
+    "bootstrapIterations": 2000
+  },
+  "periods": {
+    "full": "2019-09-04T03:00:00Z/2026-07-10T14:00:00Z",
+    "discovery": "2019-09-04T03:00:00Z/2023-10-14T14:00:00Z",
+    "validation": "2023-10-14T15:00:00Z/2025-02-25T14:00:00Z",
+    "final": "2025-02-25T15:00:00Z/2026-07-10T14:00:00Z"
+  },
+  "limitations": [
+    "One instrument and one-hour bars",
+    "Commission is modelled but slippage and spread are not",
+    "A bar touching both barriers is counted as a loss",
+    "This tests one fixed impulse and revisit definition, not every support-zone formulation"
+  ],
+  "reopeningConditions": [
+    "A preregistered definition with positive net expectancy on a new untouched period",
+    "A causal context filter that survives its own chronological validation",
+    "The result remains positive after spread and slippage"
+  ]
+}

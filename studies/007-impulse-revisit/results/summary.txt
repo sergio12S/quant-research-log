@@ -1,0 +1,13 @@
+dataset: 60000 BTCUSDT 1h bars
+cost: 4.404 bps/side; slippage not modelled
+
+variant            partition    events   mean net bps   95% bootstrap CI
+-----------------  -----------  -------  -------------  ------------------
+range_only         discovery        497        -13.778  [-18.468, -9.034]
+range_only         validation       237        -16.038  [-20.892, -11.193]
+range_only         final            205        -11.374  [-16.007, -6.347]
+range_and_volume   discovery        438        -13.382  [-18.404, -8.200]
+range_and_volume   validation       209        -17.745  [-22.950, -12.416]
+range_and_volume   final            183        -11.017  [-16.153, -5.691]
+
+verdict: REJECTED
