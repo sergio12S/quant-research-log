@@ -7,9 +7,12 @@ Nothing here is a signal service and nothing here is an invitation to copy a
 strategy. The value, if there is any, is in the screens — the tests that a
 candidate has to survive, and the order they should be applied in.
 
-**Disclosure:** I build [RLXBT](https://rlxbt.com), the backtesting engine used
+**Disclosure:** I build [RLXBT](https://rlxbt.com/?utm_source=github&utm_medium=research_log&utm_campaign=devrel), the backtesting engine used
 for this work. Every study states the commands it was produced with so the
 result does not depend on trusting either the engine or me.
+
+[Explore the Research Atlas](https://rlxbt.com/research?utm_source=github&utm_medium=research_log&utm_campaign=devrel)
+· [Start free](https://rlxbt.com/login?plan=free&utm_source=github&utm_medium=research_log&utm_campaign=devrel)
 
 ---
 
@@ -77,10 +80,10 @@ issue is welcome.
 
 ## Reproducing
 
-The engine is public two ways: the macOS app from [rlxbt.com](https://rlxbt.com),
+The engine is public two ways: the macOS app from [rlxbt.com](https://rlxbt.com/?utm_source=github&utm_medium=research_log&utm_campaign=devrel),
 and the headless server image `ghcr.io/sergio12s/rlxbt-server` with the compose
 file at
-[rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml).
+[rlxbt.com/downloads](https://rlxbt.com/downloads/rlxbt-server-compose.yml?utm_source=github&utm_medium=research_log&utm_campaign=devrel).
 
 **Use 0.2.12 or later.** Two settings these studies depend on — the signal
 execution timing, and whether a synthetic take-profit and stop-loss are overlaid
