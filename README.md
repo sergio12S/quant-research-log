@@ -11,12 +11,30 @@ Nothing here is a signal service and nothing here is an invitation to copy a
 strategy. The value, if there is any, is in the screens — the tests that a
 candidate has to survive, and the order they should be applied in.
 
+## Check one yourself, right now
+
+Six of the eleven studies reproduce with nothing but a Python interpreter — no
+account, no engine, no `pip install`, no network. Their data is in the repo and
+their code imports only the standard library.
+
+```bash
+git clone https://github.com/sergio12S/quant-research-log
+cd quant-research-log/studies/009-cost-survival
+./run.sh
+```
+
+That takes under a second and reprints the study's own numbers. The same works
+for [006](studies/006-four-failed-ideas/), [007](studies/007-impulse-revisit/),
+[008](studies/008-state-sequence/), [010](studies/010-predictive-not-tradable/)
+and [011](studies/011-wrong-hypothesis/).
+
+The other five need the engine, and the table below says which. That is the
+honest split: a claim you cannot check without buying something is worth less
+than one you can, and most of what is here you can.
+
 **Disclosure:** I build [RLXBT](https://rlxbt.com/?utm_source=github&utm_medium=research_log&utm_campaign=devrel), the backtesting engine used
 for this work. Every study states the commands it was produced with so the
 result does not depend on trusting either the engine or me.
-
-[Explore the Research Atlas](https://rlxbt.com/research?utm_source=github&utm_medium=research_log&utm_campaign=devrel)
-· [Start free](https://rlxbt.com/login?plan=free&utm_source=github&utm_medium=research_log&utm_campaign=devrel)
 
 ---
 
@@ -88,7 +106,21 @@ caveats, and a `run.sh` that reproduces them from data bundled in the repo.
 If a study's `run.sh` does not reproduce its own numbers, that is a bug and an
 issue is welcome.
 
-## Reproducing
+**What each study needs to run**
+
+| Studies | Requirement |
+|---|---|
+| 006, 007, 008, 009, 010, 011 | `python3` and the standard library. Nothing else, no network. |
+| 001, 002, 003, 005 | The engine binary: `./run.sh /path/to/engine` |
+| 004 | The headless server on an HTTP port: `./run.sh http://127.0.0.1:8142` |
+
+The six standard-library studies are the ones that carry the methodology
+findings — cost survival, threshold conversion, state sequences, the sign
+inversion. The five that need the engine are the ones measuring the engine.
+
+## Reproducing the five studies that need the engine
+
+The six listed above need none of this; `./run.sh` is the whole procedure.
 
 The engine is public two ways: the macOS app from [rlxbt.com](https://rlxbt.com/?utm_source=github&utm_medium=research_log&utm_campaign=devrel),
 and the headless server image `ghcr.io/sergio12s/rlxbt-server` with the compose
@@ -163,3 +195,13 @@ worst, since they are worse still.
 Costs are quoted as **basis points per side**. The live cost used throughout is
 4.404 bps/side; where a study uses a different figure it says so in the first
 paragraph.
+
+## The engine
+
+[RLXBT](https://rlxbt.com/?utm_source=github&utm_medium=research_log&utm_campaign=devrel)
+produced the runs behind the five engine-dependent studies, and study 002 is a
+record of it failing. There is also a
+[Research Atlas](https://rlxbt.com/research?utm_source=github&utm_medium=research_log&utm_campaign=devrel)
+of these results and a
+[free tier](https://rlxbt.com/login?plan=free&utm_source=github&utm_medium=research_log&utm_campaign=devrel).
+None of it is needed to check the six studies above.
